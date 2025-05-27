@@ -1,5 +1,5 @@
 
-import { type DegreeConfiguration, type StudentDegree } from "./type-program";
+import { type DegreeConfiguration, type StudentDegree, type AcademicRequirements} from "./type-program";
 
 export interface Course {
   codes: string[]; 		// ["FREN 403", "HUMS 409"]
@@ -19,14 +19,18 @@ export interface StudentSemester {
     season: number;
     title: string;
 	studentCourses: StudentCourse[];
+    isCompleted: boolean; // completed (true) vs planned (false)
 }
 
 export interface FYP {
 	languageRequirement: string;
-	studentSemesters: StudentSemester[]
+	studentSemesters: StudentSemester[];
+  academicRequirements: AcademicRequirements;
 	degreeConfigurations: DegreeConfiguration[][];
 	degreeDeclarations: StudentDegree[];
 }
+
+
 
 export interface User {
 	name: string;

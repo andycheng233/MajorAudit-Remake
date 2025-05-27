@@ -1,39 +1,70 @@
 import { type Course } from "../types/type-user";
-import DistributionOutput from "./DistributionOutput";
+import { removeCourse } from "../utils/userDataHelpers";
+import {
+  formatSeason,
+  formatCredits,
+  formatDistributions,
+} from "../utils/formatHelpers";
+import { useUser } from "../context/UserContext";
+
+import { useDrag } from "react-dnd";
+import { useRef } from "react";
+import clsx from "clsx";
+
+import cancel from "../assets/cancel.svg";
 
 interface CourseOutputProps {
   course: Course;
+  draggable?: boolean;
+  removable?: boolean;
+  semesterSeasonCode?: number;
+  semesterCompleted?: boolean;
 }
 
-function formatSeason(seasons: string[]) {
-  let output = "";
-  seasons.forEach((season, index) => {
-    index === 0 ? (output += season) : (output += ", " + season);
-  });
-
-  return output;
-}
-
-function formatCredits(credit: number) {
-  let output = "";
-  credit === 1 ? (output += "1 Credit") : (output += credit + " Credits");
-  return output;
-}
-
-function formatDistributions(distributions: string[]) {
-  return (
-    <div className="flex flex-row gap-2">
-      {distributions.map((distribution) => (
-        <DistributionOutput distribution={distribution} />
-      ))}
-    </div>
+function CourseOutput({
+  course,
+  draggable = true,
+  removable = false,
+  semesterSeasonCode = -1,
+  semesterCompleted = false,
+}: CourseOutputProps) {
+  const { userData, setUserData } = useUser();
+  const ref = useRef<HTMLDivElement>(null);
+  const [{ isDragging }, drag] = useDrag(
+    () => ({
+      type: "course",
+      item: { selectedCourse: course },
+      collect: (monitor) => ({
+        isDragging: !!monitor.isDragging(),
+      }),
+    }),
+    [course]
   );
-}
 
-function CourseOutput({ course }: CourseOutputProps) {
+  if (draggable) drag(ref);
+
+  const handleCourseRemove = () => {
+    if (userData)
+      setUserData(removeCourse(userData, course, semesterSeasonCode));
+  };
+
   return (
     <>
-      <div className="flex flex-col justify-between p-2 bg-gray-200 w-full h-24 rounded-md">
+      <div
+        className={clsx(
+          "flex flex-col justify-between p-2 bg-gray-200 w-full h-24 rounded-md relative",
+          isDragging ? "border-4 border-blue-200" : "border-0 border-black"
+        )}
+        ref={ref}
+      >
+        {removable && !semesterCompleted && (
+          <button
+            className="absolute top-0 right-0 h-5 w-5 m-1 active:scale-125 transition duration-300 ease-in-out"
+            onClick={handleCourseRemove}
+          >
+            <img src={cancel} alt="cancel button"></img>
+          </button>
+        )}
         <p className="font-bold truncate overflow-hidden whitespace-nowrap">
           {course.codes[0]}
           <span className="text-gray-500 text-sm font-medium">

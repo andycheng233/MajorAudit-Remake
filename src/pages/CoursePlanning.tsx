@@ -12,29 +12,43 @@ import addSemesterIcon from "../assets/addSemester.svg";
 
 function CoursePlanning() {
   const { userData, setUserData } = useUser();
-  const [semesterData, setSemesterData] = useState<StudentSemester>({
-    season: -1,
+  const [formData, setFormData] = useState({
+    term: -1,
+    year: -1,
     title: "",
-    studentCourses: [],
   });
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setSemesterData((prev) => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
   const handleInputSubmit = () => {
-    if (!(semesterData.season != -1 && semesterData.title && userData)) {
+    if (
+      !(
+        formData.term != -1 &&
+        formData.year != -1 &&
+        formData.title &&
+        userData
+      )
+    ) {
       alert("Please fill out all fields before creating a new semester!");
       return;
     }
 
-    setUserData(addSemester(userData, semesterData));
+    const newSemester: StudentSemester = {
+      title: formData.title,
+      season: Number(`${formData.year}${formData.term}`),
+      studentCourses: [],
+      isCompleted: false,
+    };
+
+    setUserData(addSemester(userData, newSemester));
   };
 
   return (
@@ -54,7 +68,7 @@ function CoursePlanning() {
             <ul className="flex flex-col p-2 w-full gap-4">
               {mockCourses.map((course, index) => (
                 <li key={index}>
-                  <CourseOutput course={course} />
+                  <CourseOutput course={course} draggable={true} />
                 </li>
               ))}
             </ul>
@@ -77,29 +91,39 @@ function CoursePlanning() {
           </header>
           <hr className="border-gray-200 border-t-3" />
           <div className="flex flex-row p-4 pl-6 gap-4 items-center bg-gray-100">
-            <button>
+            <button
+              onClick={handleInputSubmit}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleInputSubmit();
+              }}
+            >
               <img
                 src={addSemesterIcon}
                 alt="addSemester icon"
                 className="h-6 w-6 active:scale-125 transition duration-300 ease-in-out"
-                onClick={handleInputSubmit}
               />
             </button>
             <h2 className="text-xl font-medium">Add Semester </h2>
             <select
               className="px-4 py-2 border rounded-md text-center"
-              name="season"
+              name="term"
               onChange={handleInputChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleInputSubmit();
+              }}
             >
               <option value="">Select a term</option>
-              <option value="fall">Fall</option>
-              <option value="spring">Spring</option>
-              <option value="summer">Summer</option>
+              <option value="01">Fall</option>
+              <option value="02">Spring</option>
+              <option value="03">Summer</option>
             </select>
             <select
               className="px-4 py-2 border rounded-md text-center"
               name="year"
               onChange={handleInputChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleInputSubmit();
+              }}
             >
               <option value="">Select a year</option>
               <option value="2020">2020-2021</option>
@@ -119,6 +143,9 @@ function CoursePlanning() {
               className="border p-2 rounded w-64 h-10"
               name="title"
               onChange={handleInputChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleInputSubmit();
+              }}
             />
           </div>
           <hr className="border-gray-200 border-t-3" />

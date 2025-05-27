@@ -19,6 +19,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     const stored = localStorage.getItem("mockUserData");
     if (stored) setUserData(JSON.parse(stored));
     else setUserData(initialUserData);
+    //if (stored) setUserData(initialUserData); //to reset mock user data
   }, []);
 
   // save data to local storage on change

@@ -1,27 +1,147 @@
 import checkIcon from "../assets/check.svg";
+import { useUser } from "../context/UserContext";
+
+import { useMemo } from "react";
+
+import { calcTotalCredits, calcTotalCourses } from "../utils/userDataHelpers";
+import { formatC_P_UP } from "../utils/formatHelpers";
 
 function Dashboard() {
+  const { userData } = useUser();
+
+  const graduationCreditsRequired = 36;
+
+  const totalCompletedCredits = useMemo(
+    () => (userData ? calcTotalCredits(userData, true) : 0),
+    [userData]
+  );
+
+  const totalPlannedCredits = useMemo(
+    () => (userData ? calcTotalCredits(userData, false) : 0),
+    [userData]
+  );
+
+  const totalCompletedCourses = useMemo(
+    () => (userData ? calcTotalCourses(userData, true) : 0),
+    [userData]
+  );
+
   return (
     <>
       <div className="min-h-screen bg-gray-50 p-6 min-w-screen">
         {/* Header */}
         <header className="mb-8 flex gap-3 items-center">
-          <h1 className="text-3xl font-bold text-gray-800">Andy's Dashboard</h1>
+          <h1 className="text-3xl font-bold text-gray-800">
+            {userData?.name.split(" ")[0]}'s Dashboard {/* get first name*/}
+          </h1>
           <img src={checkIcon} alt="check icon" className="w-9 h-9"></img>
         </header>
+
+        {/* Requirements Progress */}
+        <section className="flex flex-row w-full gap-4">
+          <div className="bg-white rounded-lg shadow p-6 mb-8 w-1/2">
+            <h3 className="text-md font-semibold mb-2">
+              Degree Progress (Credits)
+            </h3>
+
+            <div className="mb-4 h-3 w-full flex overflow-hidde">
+              <div
+                style={{
+                  width: `${
+                    (totalCompletedCredits / graduationCreditsRequired) * 100
+                  }%`,
+                }}
+                className="rounded-lg bg-green-700 transition-all duration-500 ease-out"
+              ></div>
+              <div
+                style={{
+                  width: `${
+                    (totalPlannedCredits / graduationCreditsRequired) * 100
+                  }%`,
+                }}
+                className="rounded-lg bg-yellow-500 transition-all duration-500 ease-out"
+              ></div>
+              <div
+                style={{
+                  width: `${
+                    ((graduationCreditsRequired -
+                      totalCompletedCredits -
+                      totalPlannedCredits) /
+                      graduationCreditsRequired) *
+                    100
+                  }%`,
+                }}
+                className="rounded-lg bg-gray-300 transition-all duration-500 ease-out"
+              ></div>
+            </div>
+            {formatC_P_UP(
+              totalCompletedCredits,
+              totalPlannedCredits,
+              graduationCreditsRequired -
+                totalCompletedCredits -
+                totalPlannedCredits
+            )}
+          </div>
+
+          <div className="bg-white rounded-lg shadow p-6 mb-8 w-1/2">
+            <h3 className="text-md font-semibold mb-2">
+              Major Progress (Courses)
+            </h3>
+
+            <div className="mb-4 h-3 w-full flex overflow-hidde">
+              <div
+                style={{
+                  width: `${
+                    (totalCompletedCredits / graduationCreditsRequired) * 100
+                  }%`,
+                }}
+                className="rounded-lg bg-green-700 transition-all duration-500 ease-out"
+              ></div>
+              <div
+                style={{
+                  width: `${
+                    (totalPlannedCredits / graduationCreditsRequired) * 100
+                  }%`,
+                }}
+                className="rounded-lg bg-yellow-500 transition-all duration-500 ease-out"
+              ></div>
+              <div
+                style={{
+                  width: `${
+                    ((graduationCreditsRequired -
+                      totalCompletedCredits -
+                      totalPlannedCredits) /
+                      graduationCreditsRequired) *
+                    100
+                  }%`,
+                }}
+                className="rounded-lg bg-gray-300 transition-all duration-500 ease-out"
+              ></div>
+            </div>
+            {formatC_P_UP(
+              totalCompletedCredits,
+              totalPlannedCredits,
+              graduationCreditsRequired -
+                totalCompletedCredits -
+                totalPlannedCredits
+            )}
+          </div>
+        </section>
 
         {/* Summary Cards */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-gray-500">Credits Completed</h2>
-            <p className="text-3xl font-semibold">90</p>
+            <h2 className="text-gray-500">Courses Completed</h2>
+            <p className="text-3xl font-semibold">{totalCompletedCourses}</p>
           </div>
           <div className="bg-white rounded-lg shadow p-6">
             <h2 className="text-gray-500">Credits Remaining</h2>
             <p className="text-3xl font-semibold">30</p>
           </div>
           <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-gray-500">Categories Completed</h2>
+            <h2 className="text-gray-500">
+              Distributional Requirements Completed
+            </h2>
             <p className="text-3xl font-semibold">5 / 7</p>
           </div>
           <div className="bg-white rounded-lg shadow p-6">

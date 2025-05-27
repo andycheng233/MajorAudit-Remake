@@ -58,14 +58,19 @@ export interface Degree {
 
 // \END{MAJOR MAGIC}
 
-
-
-
-
-
-
 export interface StudentDegree {
 	status: string; // DA | ADD | PIN
 	programIndex: number;
 	degreeIndex: number;
+}
+
+
+
+export interface AcademicRequirements {
+	"Hu": StudentCourse[];
+	"Sc": StudentCourse[]; 
+	"So": StudentCourse[]; 
+	"QR": StudentCourse[]; 
+	"WR": StudentCourse[]; 
+	"language": StudentCourse[];
 }
