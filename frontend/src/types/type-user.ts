@@ -1,5 +1,5 @@
 
-import { type DegreeConfiguration, type StudentDegree, type AcademicRequirements} from "./type-program";
+import { type DegreeConfiguration, type MajorRequirement, type MajorProgress, type StudentDegree} from "./type-program";
 
 export interface Course {
   codes: string[]; 		// ["FREN 403", "HUMS 409"]
@@ -25,9 +25,13 @@ export interface StudentSemester {
 export interface FYP {
 	languageRequirement: string;
 	studentSemesters: StudentSemester[];
-  academicRequirements: AcademicRequirements;
-	degreeConfigurations: DegreeConfiguration[][];
-	degreeDeclarations: StudentDegree[];
+
+  // shows degree, major, certificate requirements
+  degreeConfigurations: MajorRequirement[];
+  degreeProgress: MajorProgress[];
+
+	//degreeConfigurations: DegreeConfiguration[][];
+	//degreeDeclarations: StudentDegree[];
 }
 
 

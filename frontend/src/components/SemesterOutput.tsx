@@ -9,7 +9,7 @@ import {
 import { useUser } from "../context/UserContext";
 
 import CourseOutput from "./CourseOutput";
-import BlankCourseOutput from "../components/BlankCourseOutput";
+import BlankCourseOutput from "./BlankCourseOutput";
 
 import trashcan from "../assets/trashcan.svg";
 import lock from "../assets/lock.svg";

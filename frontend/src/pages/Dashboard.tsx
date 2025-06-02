@@ -1,13 +1,15 @@
 import checkIcon from "../assets/check.svg";
 import { useUser } from "../context/UserContext";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import { calcTotalCredits, calcTotalCourses } from "../utils/userDataHelpers";
 import { formatC_P_UP } from "../utils/formatHelpers";
+import MajorRequirementList from "../components/MajorRequirementList";
 
 function Dashboard() {
   const { userData } = useUser();
+  const [activeTab, setActiveTab] = useState("degree");
 
   const graduationCreditsRequired = 36;
 
@@ -28,7 +30,7 @@ function Dashboard() {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-50 p-6 min-w-screen">
+      <div className=" h-full flex flex-col bg-gray-50 p-6 min-w-screen">
         {/* Header */}
         <header className="mb-8 flex gap-3 items-center">
           <h1 className="text-3xl font-bold text-gray-800">
@@ -150,50 +152,59 @@ function Dashboard() {
           </div>
         </section>
 
-        {/* Requirements Progress */}
-        <section className="bg-white rounded-lg shadow p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-4">Progress by Category</h2>
-
-          {/* Example progress bars */}
-          <div className="mb-4">
-            <p className="mb-1 font-medium">Core Courses</p>
-            <div className="w-full bg-gray-200 rounded h-4">
-              <div
-                className="bg-blue-600 h-4 rounded"
-                style={{ width: "75%" }}
-              ></div>
-            </div>
+        <section className="bg-white rounded-lg shadow p-4 mb-4 w-full  flex flex-col flex-grow ">
+          <div className="flex gap-4 border-b mb-4">
+            <button
+              className={`py-2 px-4 font-medium ${
+                activeTab === "degree"
+                  ? "border-b-2 border-blue-600 text-blue-600"
+                  : "text-gray-500"
+              }`}
+              onClick={() => setActiveTab("degree")}
+            >
+              Degree
+            </button>
+            <button
+              className={`py-2 px-4 font-medium ${
+                activeTab === "major"
+                  ? "border-b-2 border-blue-600 text-blue-600"
+                  : "text-gray-500"
+              }`}
+              onClick={() => setActiveTab("major")}
+            >
+              Major
+            </button>
+            <button
+              className={`py-2 px-4 font-medium ${
+                activeTab === "certificates"
+                  ? "border-b-2 border-blue-600 text-blue-600"
+                  : "text-gray-500"
+              }`}
+              onClick={() => setActiveTab("certificates")}
+            >
+              Certificates
+            </button>
+            <button
+              className={`py-2 px-4 font-medium ${
+                activeTab === "pinned"
+                  ? "border-b-2 border-blue-600 text-blue-600"
+                  : "text-gray-500"
+              }`}
+              onClick={() => setActiveTab("pinned")}
+            >
+              Pinned
+            </button>
           </div>
-
-          <div className="mb-4">
-            <p className="mb-1 font-medium">Electives</p>
-            <div className="w-full bg-gray-200 rounded h-4">
-              <div
-                className="bg-green-600 h-4 rounded"
-                style={{ width: "40%" }}
-              ></div>
-            </div>
+          <div className="flex flex-row h-full mb-6">
+            {userData?.FYP?.degreeProgress?.[0] ? (
+              <MajorRequirementList
+                major_requirement={userData.FYP.degreeConfigurations[0]}
+                major_progress={userData.FYP.degreeProgress[0]}
+              />
+            ) : (
+              <div>Loading degree requirements...</div>
+            )}{" "}
           </div>
-
-          <div className="mb-4">
-            <p className="mb-1 font-medium">General Education</p>
-            <div className="w-full bg-gray-200 rounded h-4">
-              <div
-                className="bg-yellow-500 h-4 rounded"
-                style={{ width: "90%" }}
-              ></div>
-            </div>
-          </div>
-        </section>
-
-        {/* Upcoming Courses / Alerts */}
-        <section className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold mb-4">Upcoming Courses</h2>
-          <ul className="list-disc list-inside space-y-2 text-gray-700">
-            <li>CS 450 - Advanced Algorithms (Fall 2025)</li>
-            <li>MATH 310 - Linear Algebra (Spring 2025)</li>
-            <li>PHYS 220 - Modern Physics (Fall 2025)</li>
-          </ul>
         </section>
       </div>
     </>
