@@ -84,9 +84,9 @@ function CoursePlanning() {
               <img src={pencilIcon} alt="pencil icon" className="h-10 w-10" />
             </div>
             <p className="text-gray-500 font-medium mt-2">
-              Welcome to your Course Planning page! Create new semesters below,
-              drag classes from the sidebar to add courses, and create custom
-              courses by clicking on the +!
+              Welcome to your Course Planning page! Create new semesters, drag
+              Yale courses from the sidebar, and create custom courses by
+              clicking on the +!
             </p>
           </header>
           <hr className="border-gray-200 border-t-3" />

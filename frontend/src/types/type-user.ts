@@ -22,13 +22,21 @@ export interface StudentSemester {
     isCompleted: boolean; // completed (true) vs planned (false)
 }
 
+interface ProgramStats 
+{
+  majorNum: number;
+  certificateNum: number;
+}
+
 export interface FYP {
 	languageRequirement: string;
 	studentSemesters: StudentSemester[];
 
   // shows degree, major, certificate requirements
-  degreeConfigurations: MajorRequirement[];
+  // degreeConfigurations: MajorRequirement[];
+
   degreeProgress: MajorProgress[];
+  statCount: ProgramStats; // how many majors added, how many certificates added
 
 	//degreeConfigurations: DegreeConfiguration[][];
 	//degreeDeclarations: StudentDegree[];

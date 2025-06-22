@@ -6,7 +6,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import CoursePlanning from "./pages/CoursePlanning";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
-import Requirements from "./pages/Requirements";
+import Programs from "./pages/Programs";
 import Navbar from "./components/Navbar";
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
             <main className="flex-1 overflow-auto">
               <Routes>
                 <Route path="/" element={<Dashboard />} />
-                <Route path="/requirements" element={<Requirements />} />
+                <Route path="/programs" element={<Programs />} />
                 <Route path="/course-planning" element={<CoursePlanning />} />
                 <Route path="/profile" element={<Profile />} />
               </Routes>

@@ -6,10 +6,14 @@ import { useMemo, useState } from "react";
 import { calcTotalCredits, calcTotalCourses } from "../utils/userDataHelpers";
 import { formatC_P_UP } from "../utils/formatHelpers";
 import MajorRequirementList from "../components/MajorRequirementList";
+import MajorRequirementGraph from "../components/MajorRequirementGraph";
 
 function Dashboard() {
   const { userData } = useUser();
   const [activeTab, setActiveTab] = useState("degree");
+  const [tabIndex, setTabIndex] = useState(0);
+  const [selectedMajorIndex, setSelectedMajorIndex] = useState(0);
+  const [selectedCertificateIndex, setSelectedCertificateIndex] = useState(0);
 
   const graduationCreditsRequired = 36;
 
@@ -27,6 +31,58 @@ function Dashboard() {
     () => (userData ? calcTotalCourses(userData, true) : 0),
     [userData]
   );
+
+  // Calculate counts
+  const majorCount = userData?.FYP?.statCount?.majorNum ?? 0;
+  const certificateCount = userData?.FYP?.statCount?.certificateNum ?? 0;
+
+  // Helper functions for navigation
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+
+    switch (tab) {
+      case "degree":
+        setTabIndex(0);
+        break;
+      case "major":
+        if (majorCount > 0) {
+          setTabIndex(1 + selectedMajorIndex);
+        }
+        break;
+      case "certificate":
+        if (certificateCount > 0) {
+          setTabIndex(1 + majorCount + selectedCertificateIndex);
+        }
+        break;
+    }
+  };
+
+  const handleMajorNavigation = (direction: "prev" | "next") => {
+    if (direction === "prev" && selectedMajorIndex > 0) {
+      const newIndex = selectedMajorIndex - 1;
+      setSelectedMajorIndex(newIndex);
+      setTabIndex(1 + newIndex);
+    } else if (direction === "next" && selectedMajorIndex < majorCount - 1) {
+      const newIndex = selectedMajorIndex + 1;
+      setSelectedMajorIndex(newIndex);
+      setTabIndex(1 + newIndex);
+    }
+  };
+
+  const handleCertificateNavigation = (direction: "prev" | "next") => {
+    if (direction === "prev" && selectedCertificateIndex > 0) {
+      const newIndex = selectedCertificateIndex - 1;
+      setSelectedCertificateIndex(newIndex);
+      setTabIndex(1 + majorCount + newIndex);
+    } else if (
+      direction === "next" &&
+      selectedCertificateIndex < certificateCount - 1
+    ) {
+      const newIndex = selectedCertificateIndex + 1;
+      setSelectedCertificateIndex(newIndex);
+      setTabIndex(1 + majorCount + newIndex);
+    }
+  };
 
   return (
     <>
@@ -46,7 +102,7 @@ function Dashboard() {
               Degree Progress (Credits)
             </h3>
 
-            <div className="mb-4 h-3 w-full flex overflow-hidde">
+            <div className="mb-4 h-3 w-full flex overflow-hidden justify-center">
               <div
                 style={{
                   width: `${
@@ -90,7 +146,7 @@ function Dashboard() {
               Major Progress (Courses)
             </h3>
 
-            <div className="mb-4 h-3 w-full flex overflow-hidde">
+            <div className="mb-4 h-3 w-full flex overflow-hidden">
               <div
                 style={{
                   width: `${
@@ -152,58 +208,122 @@ function Dashboard() {
           </div>
         </section>
 
-        <section className="bg-white rounded-lg shadow p-4 mb-4 w-full  flex flex-col flex-grow ">
-          <div className="flex gap-4 border-b mb-4">
-            <button
-              className={`py-2 px-4 font-medium ${
-                activeTab === "degree"
-                  ? "border-b-2 border-blue-600 text-blue-600"
-                  : "text-gray-500"
-              }`}
-              onClick={() => setActiveTab("degree")}
-            >
-              Degree
-            </button>
-            <button
-              className={`py-2 px-4 font-medium ${
-                activeTab === "major"
-                  ? "border-b-2 border-blue-600 text-blue-600"
-                  : "text-gray-500"
-              }`}
-              onClick={() => setActiveTab("major")}
-            >
-              Major
-            </button>
-            <button
-              className={`py-2 px-4 font-medium ${
-                activeTab === "certificates"
-                  ? "border-b-2 border-blue-600 text-blue-600"
-                  : "text-gray-500"
-              }`}
-              onClick={() => setActiveTab("certificates")}
-            >
-              Certificates
-            </button>
-            <button
-              className={`py-2 px-4 font-medium ${
-                activeTab === "pinned"
-                  ? "border-b-2 border-blue-600 text-blue-600"
-                  : "text-gray-500"
-              }`}
-              onClick={() => setActiveTab("pinned")}
-            >
-              Pinned
-            </button>
+        <section className="bg-white rounded-lg shadow p-4 pb-2 w-full flex flex-col flex-grow mb-2 overflow-hidden">
+          <div className="flex flex-row items-center border-b mb-2">
+            <div className="flex gap-4 w-100">
+              <button
+                className={`py-2 px-4 font-medium ${
+                  activeTab === "degree"
+                    ? "border-b-2 border-blue-600 text-blue-600"
+                    : "text-gray-500"
+                }`}
+                onClick={() => handleTabChange("degree")}
+              >
+                Degree
+              </button>
+              <button
+                className={`py-2 px-4 font-medium ${
+                  activeTab === "major"
+                    ? "border-b-2 border-blue-600 text-blue-600"
+                    : "text-gray-500"
+                } ${majorCount === 0 ? "opacity-50 cursor-not-allowed" : ""}`}
+                onClick={() => majorCount > 0 && handleTabChange("major")}
+                disabled={majorCount === 0}
+              >
+                Major{" "}
+                {majorCount > 1 && `(${selectedMajorIndex + 1}/${majorCount})`}
+              </button>
+              <button
+                className={`py-2 px-4 font-medium ${
+                  activeTab === "certificate"
+                    ? "border-b-2 border-blue-600 text-blue-600"
+                    : "text-gray-500"
+                } ${
+                  certificateCount === 0 ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+                onClick={() =>
+                  certificateCount > 0 && handleTabChange("certificate")
+                }
+                disabled={certificateCount === 0}
+              >
+                Certificates{" "}
+                {certificateCount > 1 &&
+                  `(${selectedCertificateIndex + 1}/${certificateCount})`}
+              </button>
+            </div>
+
+            {/* Navigation and Title */}
+            <div className="flex-1 flex justify-center items-center gap-4">
+              {/* Previous button for majors/certificates */}
+              {((activeTab === "major" && majorCount > 1) ||
+                (activeTab === "certificate" && certificateCount > 1)) && (
+                <button
+                  onClick={() =>
+                    activeTab === "major"
+                      ? handleMajorNavigation("prev")
+                      : handleCertificateNavigation("prev")
+                  }
+                  disabled={
+                    (activeTab === "major" && selectedMajorIndex === 0) ||
+                    (activeTab === "certificate" &&
+                      selectedCertificateIndex === 0)
+                  }
+                  className="p-2 rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  ←
+                </button>
+              )}
+
+              {/* Program name */}
+              <div>
+                <span className="font-bold text-2xl">
+                  {userData?.FYP?.degreeProgress?.[tabIndex]?.name ||
+                    "Loading..."}
+                </span>
+              </div>
+
+              {/* Next button for majors/certificates */}
+              {((activeTab === "major" && majorCount > 1) ||
+                (activeTab === "certificate" && certificateCount > 1)) && (
+                <button
+                  onClick={() =>
+                    activeTab === "major"
+                      ? handleMajorNavigation("next")
+                      : handleCertificateNavigation("next")
+                  }
+                  disabled={
+                    (activeTab === "major" &&
+                      selectedMajorIndex === majorCount - 1) ||
+                    (activeTab === "certificate" &&
+                      selectedCertificateIndex === certificateCount - 1)
+                  }
+                  className="p-2 rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  →
+                </button>
+              )}
+            </div>
           </div>
-          <div className="flex flex-row h-full mb-6">
-            {userData?.FYP?.degreeProgress?.[0] ? (
-              <MajorRequirementList
-                major_requirement={userData.FYP.degreeConfigurations[0]}
-                major_progress={userData.FYP.degreeProgress[0]}
-              />
-            ) : (
-              <div>Loading degree requirements...</div>
-            )}{" "}
+
+          <div className="flex flex-row h-full items-center gap-2 min-h-0">
+            <div className="flex-shrink-0">
+              {userData?.FYP?.degreeProgress?.[tabIndex] ? (
+                <MajorRequirementList
+                  major_progress={userData.FYP.degreeProgress[tabIndex]}
+                />
+              ) : (
+                <div>Loading degree requirements...</div>
+              )}{" "}
+            </div>
+            <div className="flex-1 h-96 bg-white border-gray-200 border-2 m-2 p-2 shadow overflow-hidden min-w-0">
+              {userData?.FYP?.degreeProgress?.[tabIndex] ? (
+                <MajorRequirementGraph
+                  major_progress={userData.FYP.degreeProgress[tabIndex]}
+                />
+              ) : (
+                <div>Loading degree requirements...</div>
+              )}{" "}
+            </div>
           </div>
         </section>
       </div>

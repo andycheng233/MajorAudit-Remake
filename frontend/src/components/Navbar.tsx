@@ -11,7 +11,7 @@ function Navbar() {
         <div className="flex items-center justify-around gap-6 text-lg text-black">
           <img src={sunIcon} alt="sun icon" className="w-9 h-9"></img>
           <Link to="/">Dashboard</Link>
-          <Link to="/requirements">Requirements</Link>
+          <Link to="/programs">Programs</Link>
           <Link to="/course-planning">Course Planning</Link>
           <Link to="/profile">
             <div className="flex bg-blue-500 p-3 rounded-full text-white w-10 h-10 items-center justify-center">

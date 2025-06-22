@@ -1,5 +1,5 @@
 
-import { type StudentCourse } from "./type-user";
+import { type Course, type StudentCourse } from "./type-user";
 
 interface DUS {
 	name: string;
@@ -58,9 +58,10 @@ export interface StudentDegree {
 	degreeIndex: number;
 }
 
-// for classes with substitutes
-interface CourseOptions {
-	options: StudentCourse[];
+// for both single courses and multi courses, example: you can either take CPSC 202 or MATH 244
+interface CourseItem {
+	type: 'single' | 'multi';
+	courses: Course[];
 }
 
 interface BaseRequirement {
@@ -71,53 +72,80 @@ interface BaseRequirement {
 //make a choose class --> goes through classes to fetch the correct data
 
 // if you need to complete certain pre-req, course requirements...
-export interface CourseRequirement extends BaseRequirement {
+ interface CourseRequirement extends BaseRequirement {
 	type:"course-requirement"
-	courses: (StudentCourse | CourseOptions)[];
+	courses: (CourseItem)[];
+}
+
+interface CourseRequirementProgress extends CourseRequirement {
+	completedCourses: (StudentCourse | null)[];
+	isFinished: boolean;
 }
 
 // choose 2 out of these 3 courses
-export interface GroupRequirement extends BaseRequirement {
+interface GroupRequirement extends BaseRequirement {
 	type: "group-requirement";
 	requiredNum: number;
-	courses: (StudentCourse | CourseOptions)[];
+	courses: (CourseItem)[];
 }
 
-export interface CategoryRequirement extends BaseRequirement {
+interface GroupRequirementProgress extends GroupRequirement {
+	completedCourses: (StudentCourse | null)[];
+	isFinished: boolean;
+}
+
+interface CategoryRequirement extends BaseRequirement {
 	type:"category-requirement";
 	category:string;
 	requiredNum: number;
 }
 
-export interface LevelRequirement extends BaseRequirement {
-	type:"level-requirement";
+interface CategoryRequirementProgress extends CategoryRequirement {
+	completedCourses: (StudentCourse | null)[];
+	isFinished: boolean;
+}
+
+interface ElectiveRequirement extends BaseRequirement {
+	type:"elective-requirement";
+	codes: string[];
 	minLevel: number;
 	requiredNum: number;
 }
 
-export interface ProgressionRequirement extends BaseRequirement {
-	type: "progression-requirement";
-	steps:{
-	level: number;
-	courses: StudentCourse[];
-	}[]
+interface ElectiveRequirementProgress extends ElectiveRequirement {
+	completedCourses: (StudentCourse | null)[];
+	isFinished: boolean;
 }
+
+interface ProgressionRequirement extends BaseRequirement {
+	type: "progression-requirement";
+	languageCode: string;
+	levelDist: string[];
+}
+
+interface ProgressionRequirementProgress extends ProgressionRequirement {
+	completedCourses: (StudentCourse | null)[];
+	isFinished: boolean;
+}
+
+export type MajorRequirementType = (CourseRequirement | GroupRequirement |  CategoryRequirement | ElectiveRequirement | ProgressionRequirement);
+export type MajorProgressType = (CourseRequirementProgress | GroupRequirementProgress |  CategoryRequirementProgress | ElectiveRequirementProgress | ProgressionRequirementProgress)
+
 
 export type MajorRequirement = {
+	name: string;
 	totalCourses: number;
 	totalRequirementGroups: number;
-	requirements: (CourseRequirement | GroupRequirement |  CategoryRequirement | LevelRequirement | ProgressionRequirement)[];
+	requirements: MajorRequirementType[];
 }; 
 
-export interface RequirementProgress {
-	type: string;
-	description: string;
-	completedCourses: (StudentCourse | null)[];
-	finished: boolean;
-}
-
 export type MajorProgress = {
-	requirementsProgress: RequirementProgress[];
-}
+	name: string;
+	totalCourses: number;
+	totalCompletedCourses: number;
+	totalRequirementGroups: number;
+	totalCompletedRequirementGroups: number;
+	requirementsProgress: MajorProgressType[];
+}; 
 
 
