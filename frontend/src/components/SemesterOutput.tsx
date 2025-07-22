@@ -6,23 +6,31 @@ import {
   calcTotalSemesterCredits,
   updateIsCompleted,
 } from "../utils/userDataHelpers";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../contexts/UserContext";
 
 import CourseOutput from "./CourseOutput";
 import BlankCourseOutput from "./BlankCourseOutput";
 
 import trashcan from "../assets/trashcan.svg";
-import lock from "../assets/lock.svg";
 import lockAnimation from "../animations/lockAnimation.json";
 
 import { useDrop } from "react-dnd";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import clsx from "clsx";
 import Lottie from "lottie-react";
 import type { LottieRefCurrentProps } from "lottie-react";
 
 interface SemesterOutputProps {
   semester: StudentSemester;
+}
+
+function codeToYear(code: number): number {
+  let year = Math.floor(code / 100);
+  if (code % 100 == 2 || code % 100 == 1) {
+    year -= 1;
+  }
+
+  return year;
 }
 
 // semester prop, mainly to specify the season code
@@ -129,8 +137,7 @@ function SemesterOutput({ semester }: SemesterOutputProps) {
             {updatedSemester.title}
             {"  "}
             <span className="text-base text-gray-600 mt-1">
-              {Math.floor(semester.season / 100)}-
-              {Math.floor(semester.season / 100) + 1}
+              {codeToYear(semester.season)}-{codeToYear(semester.season) + 1}
             </span>
             <button className="h-8 w-8 " onClick={handleUpdateIsCompleted}>
               <Lottie

@@ -1,7 +1,9 @@
-import { type MajorRequirement } from "./type-program";
+import { type MajorTemplate } from "./type-program";
 import {getCourse} from "../data/mock_courses";
 
-export const general_requirements: MajorRequirement = {
+// load major progress every time --> 
+
+export const general_requirements: MajorTemplate = {
     name: "General Requirements",
     totalCourses: 13,
     totalRequirementGroups: 6,
@@ -41,7 +43,6 @@ export const general_requirements: MajorRequirement = {
                 requiredNum: 2
             },
 
-            // add this in MajorProgressionRequirements
             {
             type: "progression-requirement",
             description: "Language (L1)", 
@@ -52,7 +53,7 @@ export const general_requirements: MajorRequirement = {
 }
 
 
-export const cs_requirements_bs: MajorRequirement = {
+export const cs_requirements_bs: MajorTemplate = {
     name: "Computer Science B.S.",
     totalCourses: 12,
     totalRequirementGroups: 3,
@@ -85,5 +86,39 @@ export const cs_requirements_bs: MajorRequirement = {
             ]
         },      
     ]
+}
 
-      }
+export const cs_requirements_ba: MajorTemplate = {
+    name: "Computer Science B.A.",
+    totalCourses: 10,
+    totalRequirementGroups: 3,
+    requirements: [    
+        {
+        type: "course-requirement", 
+        description: "Core Requirements",
+        courses: [
+            {type: "single", courses: ["CPSC 201"]},
+            {type: "single", courses: [getCourse("CPSC 202")]},
+            {type: "single", courses: [getCourse("CPSC 223")]},
+            {type: "single", courses: [getCourse("CPSC 323")]},
+            {type: "single", courses: [getCourse("CPSC 365")]}
+        ]
+        },  
+
+        {
+            type: "elective-requirement", 
+            description: "Electives", 
+            codes: ["CPSC"], 
+            minLevel: 300, 
+            requiredNum: 4
+        },  
+
+        {
+            type: "course-requirement", 
+            description: "Senior Project", 
+            courses: [
+                {type: "single", courses: [getCourse("CPSC 4900")]},
+            ]
+        },      
+    ]
+}

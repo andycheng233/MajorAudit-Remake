@@ -1,5 +1,5 @@
 import checkIcon from "../assets/check.svg";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../contexts/UserContext";
 
 import { useMemo, useState } from "react";
 
@@ -99,7 +99,7 @@ function Dashboard() {
         <section className="flex flex-row w-full gap-4">
           <div className="bg-white rounded-lg shadow p-6 mb-8 w-1/2">
             <h3 className="text-md font-semibold mb-2">
-              Degree Progress (Credits)
+              General Progress (Credits)
             </h3>
 
             <div className="mb-4 h-3 w-full flex overflow-hidden justify-center">

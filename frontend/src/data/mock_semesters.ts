@@ -3,7 +3,7 @@ import { mockCourses } from "./mock_courses";
 
 export const mockSemesters: StudentSemester[] = [
     {
-        season:202201, 
+        season:202203, 
         title: "Freshman Fall", 
         studentCourses: [{course: mockCourses[0], term: 202401, status: "DA_COMPLETE"}, {course: mockCourses[1], term: 202401, status: "DA_COMPLETE"},
                          {course: mockCourses[2], term: 202401, status: "DA_COMPLETE"}, {course: mockCourses[3], term: 202401, status: "DA_COMPLETE"}], 
@@ -11,7 +11,7 @@ export const mockSemesters: StudentSemester[] = [
     },
 
     {
-    season:202202, 
+    season:202301, 
         title: "Freshman Spring", 
         studentCourses: [{course: mockCourses[4], term: 202401, status: "DA_COMPLETE"}, {course: mockCourses[5], term: 202401, status: "DA_COMPLETE"},
                          {course: mockCourses[6], term: 202401, status: "DA_COMPLETE"}, {course: mockCourses[7], term: 202401, status: "DA_COMPLETE"}], 
@@ -19,7 +19,7 @@ export const mockSemesters: StudentSemester[] = [
     }, 
 
     {
-    season:202301, 
+    season:202303, 
         title: "Sophomore Fall", 
         studentCourses: [{course: mockCourses[8], term: 202401, status: "DA_COMPLETE"}, {course: mockCourses[9], term: 202401, status: "DA_COMPLETE"},
                          {course: mockCourses[10], term: 202401, status: "DA_COMPLETE"}, {course: mockCourses[11], term: 202401, status: "DA_COMPLETE"}], 
@@ -27,7 +27,7 @@ export const mockSemesters: StudentSemester[] = [
     },
 
     {
-    season:202302, 
+    season:202401, 
         title: "Sophomore Spring", 
         studentCourses: [{course: mockCourses[12], term: 202401, status: "DA_COMPLETE"}, {course: mockCourses[13], term: 202401, status: "DA_COMPLETE"},
                          {course: mockCourses[14], term: 202401, status: "DA_COMPLETE"}, {course: mockCourses[15], term: 202401, status: "DA_COMPLETE"}], 
@@ -35,28 +35,28 @@ export const mockSemesters: StudentSemester[] = [
     },
     
     {
-    season:202401, 
+    season:202403, 
         title: "Junior Fall", 
         studentCourses: [], 
         isCompleted: false
     }, 
 
     {
-    season:202402, 
+    season:202501, 
         title: "Junior Spring", 
         studentCourses: [], 
         isCompleted: false
     } , 
 
     {
-    season:202501, 
+    season:202503, 
         title: "Senior Fall", 
         studentCourses: [], 
         isCompleted: false
     }, 
 
     {
-    season:202502, 
+    season:202601, 
         title: "Senior Spring", 
         studentCourses: [], 
         isCompleted: false

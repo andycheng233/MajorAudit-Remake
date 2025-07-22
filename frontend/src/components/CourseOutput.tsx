@@ -5,10 +5,10 @@ import {
   formatCredits,
   formatDistributions,
 } from "../utils/formatHelpers";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../contexts/UserContext";
 
 import { useDrag } from "react-dnd";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import clsx from "clsx";
 
 import cancel from "../assets/cancel.svg";
@@ -41,7 +41,11 @@ function CourseOutput({
     [course]
   );
 
-  if (draggable) drag(ref);
+  const [isDraggable, setIsDraggable] = useState(draggable);
+
+  if (draggable) {
+    drag(ref);
+  }
 
   const handleCourseRemove = () => {
     if (userData)
@@ -53,7 +57,11 @@ function CourseOutput({
       <div
         className={clsx(
           "flex flex-col justify-between p-2 bg-gray-200 w-full h-24 rounded-md relative",
-          isDragging ? "border-4 border-blue-200" : "border-0 border-black"
+          isDragging
+            ? "border-4 border-blue-200 cursor-grabbing"
+            : isDraggable
+            ? "cursor-grab"
+            : ""
         )}
         ref={ref}
       >

@@ -7,126 +7,145 @@ export const mockCourses: Course[] = [
     title: "Introduction to Computer Science",
     credit: 1,
     dist: ["QR", "Sc"],
-    seasons: ["Fall", "Spring"]
+    seasons: ["Fall", "Spring"],
+    season_codes: []
   },
   {
     codes: ["PSYC 110"],
     title: "Introduction to Psychology",
     credit: 1,
     dist: ["So"],
-    seasons: ["Fall"]
+    seasons: ["Fall"],
+    season_codes: ["202501"]
   },
   {
     codes: ["ENGL 120"],
     title: "Reading and Writing the Modern Essay",
     credit: 1,
     dist: ["Hu", "WR"],
-    seasons: ["Fall", "Spring"]
+    seasons: ["Fall", "Spring"],
+    season_codes: []
   },
   {
     codes: ["FREN 403", "HUMS 409"],
     title: "Proust Interpretations: Reading *Remembrance of Things Past*",
     credit: 1,
     dist: ["Hu", "L5"],
-    seasons: ["Spring"]
+    seasons: ["Spring"],
+    season_codes: []
   },
   {
     codes: ["ECON 115"],
     title: "Introductory Microeconomics",
     credit: 1,
     dist: ["So", "QR"],
-    seasons: ["Fall", "Spring"]
+    seasons: ["Fall", "Spring"],
+    season_codes: []
   },
   {
     codes: ["MCDB 200"],
     title: "Molecular Biology",
     credit: 1,
     dist: ["Sc"],
-    seasons: ["Spring"]
+    seasons: ["Spring"],
+    season_codes: [],
   },
   {
     codes: ["HIST 136"],
     title: "The Rise and Fall of the British Empire",
     credit: 1,
     dist: ["Hu"],
-    seasons: ["Fall"]
+    seasons: ["Fall"],
+    season_codes: [],
   },
   {
     codes: ["PHYS 180"],
     title: "University Physics I",
     credit: 1,
     dist: ["Sc", "QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"],
+    season_codes: [],
   },
   {
     codes: ["AFAM 162"],
     title: "Race and Place in British Literature",
     credit: 1,
     dist: ["Hu", "WR"],
-    seasons: ["Spring"]
+    seasons: ["Spring"],
+    season_codes: [],
   },
   {
     codes: ["ASTR 130"],
     title: "Origins and the Search for Life in the Universe",
     credit: 1,
     dist: ["Sc", "QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"],
+    season_codes: [],
   },
   {
     codes: ["ART 111"],
     title: "Basic Drawing",
     credit: 1,
     dist: ["Hu"],
-    seasons: ["Spring"]
+    seasons: ["Spring"],
+    season_codes: [],
   },
   {
     codes: ["CSBR 200"],
     title: "Cross-Cultural Perspectives on Belief and Reason",
     credit: 1,
     dist: ["Hu", "So"],
-    seasons: ["Fall"]
+    seasons: ["Fall"],
+    season_codes: []
   },
   {
     codes: ["PHIL 125"],
     title: "Justice in the 21st Century",
     credit: 1,
     dist: ["Hu", "WR"],
-    seasons: ["Fall", "Spring"]
+    seasons: ["Fall", "Spring"],
+    season_codes: []
   },
   {
     codes: ["EVST 120", "GEO 120"],
     title: "Introduction to Environmental Studies",
     credit: 1,
     dist: ["So", "Sc"],
-    seasons: ["Spring"]
+    seasons: ["Spring"],
+    season_codes: []
   },
   {
     codes: ["LING 110"],
     title: "Introduction to Linguistics",
     credit: 1,
     dist: ["So", "QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"],
+    season_codes: []
   },
   {
     codes: ["HIST 219"],
     title: "The U.S. Civil War and Reconstruction",
     credit: 1,
     dist: ["Hu"],
-    seasons: ["Spring"]
+    seasons: ["Spring"], 
+    season_codes: []
   },
   {
     codes: ["THST 120"],
     title: "Acting Shakespeare",
     credit: 1,
     dist: ["Hu"],
-    seasons: ["Spring"]
+    seasons: ["Spring"], 
+    season_codes: []
+    
   },
   {
     codes: ["MATH 255"],
     title: "Geometry and Topology",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"], 
+    season_codes: []
   },
 
   // Core CS Requirements
@@ -135,28 +154,32 @@ export const mockCourses: Course[] = [
     title: "Mathematical Tools for Computer Science",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall", "Spring"]
+    seasons: ["Fall", "Spring"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 223"],
     title: "Data Structures and Programming Techniques",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall", "Spring"]
+    seasons: ["Fall", "Spring"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 323"],
     title: "Introduction to Systems Programming and Computer Organization",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall", "Spring"]
+    seasons: ["Fall", "Spring"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 365"],
     title: "Design and Analysis of Algorithms",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall", "Spring"]
+    seasons: ["Fall", "Spring"], 
+    season_codes: []
   },
 
   // Required Math Courses
@@ -165,14 +188,16 @@ export const mockCourses: Course[] = [
     title: "Calculus of Functions of One Variable I",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall", "Spring"]
+    seasons: ["Fall", "Spring"], 
+    season_codes: []
   },
   {
     codes: ["MATH 225"],
     title: "Linear Algebra and Matrix Theory",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall", "Spring"]
+    seasons: ["Fall", "Spring"], 
+    season_codes: []
   },
 
   // Statistics Requirement (one of these)
@@ -181,21 +206,24 @@ export const mockCourses: Course[] = [
     title: "Applied Statistics",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall", "Spring"]
+    seasons: ["Fall", "Spring"], 
+    season_codes: []
   },
   {
     codes: ["STAT 241"],
     title: "Probability Theory",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall", "Spring"]
+    seasons: ["Fall", "Spring"], 
+    season_codes: []
   },
   {
     codes: ["ENAS 496"],
     title: "Introduction to Probability and Statistics",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall", "Spring"]
+    seasons: ["Fall", "Spring"], 
+    season_codes: []
   },
 
   // Popular CS Electives
@@ -204,154 +232,176 @@ export const mockCourses: Course[] = [
     title: "Object-Oriented Programming",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 424"],
     title: "Computer Science Education",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Spring"]
+    seasons: ["Spring"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 427"],
     title: "Object-Oriented Programming",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Spring"]
+    seasons: ["Spring"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 434"],
     title: "Topics in Computer Science",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall", "Spring"]
+    seasons: ["Fall", "Spring"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 439"],
     title: "Software Engineering",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 440"],
     title: "Database Design and Implementation",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Spring"]
+    seasons: ["Spring"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 458"],
     title: "Automated Decision Systems",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 464"],
     title: "Human-Computer Interaction",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Spring"]
+    seasons: ["Spring"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 465"],
     title: "Theory of Distributed Systems",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 469"],
     title: "Topics in Artificial Intelligence",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 470"],
     title: "Artificial Intelligence",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 471"],
     title: "Computational Intelligence for Games",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Spring"]
+    seasons: ["Spring"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 472"],
     title: "Intelligent Robotics Laboratory",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 473"],
     title: "Intelligent Robotics Laboratory",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Spring"]
+    seasons: ["Spring"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 474"],
     title: "Computational Intelligence for Games",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 475"],
     title: "Computational Vision and Biological Perception",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Spring"]
+    seasons: ["Spring"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 477"],
     title: "Natural Language Processing",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 478"],
     title: "Machine Learning",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Spring"]
+    seasons: ["Spring"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 481"],
     title: "Introduction to Computer Graphics",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 484"],
     title: "Human-Computer Interaction",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 490"],
     title: "Independent Project",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall", "Spring"]
+    seasons: ["Fall", "Spring"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 491"],
     title: "Independent Project",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall", "Spring"]
+    seasons: ["Fall", "Spring"], 
+    season_codes: []
   },
 
   // Systems and Security
@@ -360,35 +410,40 @@ export const mockCourses: Course[] = [
     title: "Introduction to Machine Learning",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 426"],
     title: "Building Distributed Systems",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Spring"]
+    seasons: ["Spring"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 429"],
     title: "Introduction to Computer Security",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 433"],
     title: "Computer Security",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Spring"]
+    seasons: ["Spring"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 438"],
     title: "Computer Networks",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"], 
+    season_codes: []
   },
 
   // Theory Courses
@@ -397,14 +452,16 @@ export const mockCourses: Course[] = [
     title: "Cryptography and Computer Security",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Spring"]
+    seasons: ["Spring"], 
+    season_codes: []
   },
   {
     codes: ["CPSC 468"],
     title: "Computational Complexity",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"], 
+    season_codes: []
   },
 
   // Additional Math for CS Students
@@ -413,14 +470,16 @@ export const mockCourses: Course[] = [
     title: "Discrete Mathematics",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall", "Spring"]
+    seasons: ["Fall", "Spring"], 
+    season_codes: []
   },
   {
     codes: ["MATH 250"],
     title: "Multivariate Calculus",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall", "Spring"]
+    seasons: ["Fall", "Spring"], 
+    season_codes: []
   },
 
   // Physics for CS Students
@@ -429,7 +488,8 @@ export const mockCourses: Course[] = [
     title: "University Physics II",
     credit: 1,
     dist: ["Sc", "QR"],
-    seasons: ["Spring"]
+    seasons: ["Spring"], 
+    season_codes: []
   },
 
   // Additional Electives across disciplines
@@ -438,42 +498,48 @@ export const mockCourses: Course[] = [
     title: "Behavioral Economics",
     credit: 1,
     dist: ["So", "QR"],
-    seasons: ["Spring"]
+    seasons: ["Spring"], 
+    season_codes: []
   },
   {
     codes: ["PHIL 181"],
     title: "Logic",
     credit: 1,
     dist: ["Hu", "QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"], 
+    season_codes: []
   },
   {
     codes: ["LING 227"],
     title: "Computational Linguistics I",
     credit: 1,
     dist: ["So", "QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"], 
+    season_codes: []
   },
   {
     codes: ["AMTH 230"],
     title: "Optimization and Game Theory",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Spring"]
+    seasons: ["Spring"], 
+    season_codes: []
   },
   {
     codes: ["ENAS 194"],
     title: "Introduction to Information Technologies",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"], 
+    season_codes: []
   }, 
   {
     codes: ["CPSC 4900"],
     title: "CS Senior Project",
     credit: 1,
     dist: ["QR"],
-    seasons: ["Fall"]
+    seasons: ["Fall"], 
+    season_codes: []
   }
 ];
 

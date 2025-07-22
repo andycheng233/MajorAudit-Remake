@@ -1,0 +1,274 @@
+[
+    {
+        "name": "General Requirements",
+        "totalCourses": 13, 
+        "totalRequirementGroups": 6, 
+        "requirements": [    
+            {
+                "type": "category-requirement", 
+                "category": "Hu",
+                "description": "Humanity", 
+                "requiredNum": 2
+            },  
+
+            {
+                "type": "category-requirement", 
+                "category": "Sc",
+                "description": "Science", 
+                "requiredNum": 2
+            },  
+
+            {
+                "type": "category-requirement", 
+                "category": "So",
+                "description": "Social Science", 
+                "requiredNum": 2
+            },  
+
+            {
+                "type": "category-requirement", 
+                "category": "QR",
+                "description": "Quantitative Reasoning", 
+                "requiredNum": 2
+            },  
+
+            {
+                "type": "category-requirement", 
+                "category": "WR",
+                "description": "Writing", 
+                "requiredNum": 2
+            },
+
+            {
+                "type": "progression-requirement",
+                "description": "Language (L1)", 
+                "languageCode": "CHNS",
+                "levelDist": ["L1", "L2", "L3"]
+            }
+        ]
+    },
+
+    {
+        "name": "Computer Science B.S.",
+        "totalCourses": 12,
+        "totalRequirementGroups": 3,
+        "requirements": [    
+            {
+                "type": "course-requirement", 
+                "description": "Core Requirements",
+                "courses": [
+                    {"type": "single", "courses": ["CPSC 2010"]},
+                    {"type": "single", "courses": ["CPSC 2020"]},
+                    {"type": "single", "courses": ["CPSC 2230"]},
+                    {"type": "single", "courses": ["CPSC 3230"]},
+                    {"type": "single", "courses": ["CPSC 3650"]}
+                ]
+            },  
+
+            {
+                "type": "elective-requirement", 
+                "description": "Electives", 
+                "subjectCodes": ["CPSC"], 
+                "minLevel": 3000, 
+                "requiredNum": 6
+            },  
+
+            {
+                "type": "course-requirement", 
+                "description": "Senior Project", 
+                "courses": [
+                    {"type": "single", "courses": ["CPSC 4900"]}
+                ]
+            }     
+        ]
+    },
+
+    {
+        "name": "Computer Science B.A.",
+        "totalCourses": 10,
+        "totalRequirementGroups": 3,
+        "requirements": [    
+            {
+                "type": "course-requirement", 
+                "description": "Core Requirements",
+                "courses": [
+                    {"type": "single", "courses": ["CPSC 2010"]},
+                    {"type": "single", "courses": ["CPSC 2020"]},
+                    {"type": "single", "courses": ["CPSC 2230"]},
+                    {"type": "single", "courses": ["CPSC 3230"]},
+                    {"type": "single", "courses": ["CPSC 3650"]}
+                ]
+            },  
+
+            {
+                "type": "elective-requirement", 
+                "description": "Electives", 
+                "subjectCodes": ["CPSC"], 
+                "minLevel": 3000, 
+                "requiredNum": 4
+            },   
+
+            {
+                "type": "course-requirement", 
+                "description": "Senior Project", 
+                "courses": [
+                    {"type": "single", "courses": ["CPSC 4900"]}
+                ]
+            }  
+        ]   
+    }, 
+
+    {
+        "name": "Economics B.A.",
+        "totalCourses": 12,
+        "totalRequirementGroups": 8,
+        "requirements": [
+        {
+            "type": "group-requirement",
+            "description": "Math Requirement",
+            "requiredNum": 1,
+            "courseItems": [
+                {
+                "type": "single",
+                "courseCodes": ["MATH 1120"]
+                },
+                {
+                "type": "single", 
+                "courseCodes": ["MATH 1150"]
+                },
+                {
+                "type": "single",
+                "courseCodes": ["MATH 1160"]
+                },
+                {
+                "type": "single",
+                "courseCodes": ["MATH 1180"]
+                },
+                {
+                "type": "single",
+                "courseCodes": ["MATH 1200"]
+                },
+                {
+                "type": "single",
+                "courseCodes": ["ENAS 1510"]
+                },
+                {
+                "type": "multi",
+                "courseCodes": ["MATH 1100", "MATH 1110"]
+                }
+            ]
+            },
+            {
+            "type": "group-requirement",
+            "description": "Introductory Microeconomics",
+            "requiredNum": 1,
+            "courseItems": [
+                {
+                "type": "single",
+                "courseCodes": ["ECON 1108"]
+                },
+                {
+                "type": "single",
+                "courseCodes": ["ECON 1110"]
+                },
+                {
+                "type": "single",
+                "courseCodes": ["ECON 1115"]
+                }
+            ]
+            },
+            {
+            "type": "group-requirement",
+            "description": "Introductory Macroeconomics",
+            "requiredNum": 1,
+            "courseItems": [
+                {
+                "type": "single",
+                "courseCodes": ["ECON 1111"]
+                },
+                {
+                "type": "single",
+                "courseCodes": ["ECON 1116"]
+                }
+            ]
+          
+            },
+            {
+            "type": "group-requirement",
+            "description": "Intermediate Microeconomics",
+            "requiredNum": 1,
+            "courseItems": [
+                {
+                "type": "single",
+                "courseCodes": ["ECON 2121"]
+                },
+                {
+                "type": "single",
+                "courseCodes": ["ECON 2125"]
+                }
+            ]
+            },
+            {
+            "type": "group-requirement",
+            "description": "Intermediate Macroeconomics",
+            "requiredNum": 1,
+            "courseItems": [
+                {
+                "type": "single",
+                "courseCodes": ["ECON 2122"]
+                },
+                {
+                "type": "single",
+                "courseCodes": ["ECON 2126"]
+                }
+            ]
+            },
+            {
+            "type": "group-requirement",
+            "description": "Econometrics",
+            "requiredNum": 1,
+            "courseItems": [
+                {
+                "type": "single",
+                "courseCodes": ["ECON 1117"]
+                },
+                {
+                "type": "single",
+                "courseCodes": ["ECON 2123"]
+                },
+                {
+                "type": "single",
+                "courseCodes": ["ECON 2136"]
+                }
+            ]
+            },
+            {
+            "type": "elective-requirement",
+            "description": "Electives",
+            "subjectCodes": ["ECON"],
+            "minLevel": 1159,
+            "requiredNum": 4
+            },
+            {
+            "type": "elective-requirement",
+            "description": "Senior Requirement",
+            "subjectCodes": ["ECON"],
+            "minLevel": 4400,
+            //"maxLevel": 4491,
+            "requiredNum": 2
+            }
+            /*{
+            "type": "optional-requirement",
+            "description": "Senior essay - Optional but required for distinction in major",
+            "purpose": "distinction",
+            "requiredForDistinction": true,
+            "courseItems": [
+                {
+                "type": "single",
+                "courseCodes": ["ECON 4999"]
+                }
+            ]
+            }*/
+        ],
+    }
+]

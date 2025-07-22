@@ -1,8 +1,6 @@
 import {type MajorProgress } from "../types/type-program";
 import { mockCourses } from "./mock_courses";
 import {getCourse} from "../data/mock_courses"; 
-import {general_requirements, cs_requirements_bs} from "../types/type-major";
-
 
 const studentCourse = {
       course: mockCourses[1],
@@ -10,68 +8,418 @@ const studentCourse = {
       status: "DA_COMPLETE"
 }
 
-export const general_requirements_progress: MajorProgress = {
-    ...general_requirements,
-    totalCompletedCourses: 5, 
+const CPSC_2010 = 
+{
+    codes: ["CPSC 2010"],
+    title: "Introduction to Computer Science",
+    credit: 1,
+    dist: ["QR"],
+    seasons: ["Fall"],
+    season_codes: ["202503"]
+}
+
+const CPSC_2020 = 
+{
+    codes: ["CPSC 2020"],
+    title: "Mathematical Tools for Computer Science",
+    credit: 1,
+    dist: ["QR"],
+    seasons: ["Fall"],
+    season_codes: ["202503"]
+}
+
+const CPSC_2230 = 
+{
+    codes: ["CPSC 2230"],
+    title: "Data Structures and Programming Techniques",
+    credit: 1,
+    dist: ["QR"],
+    seasons: ["Fall"],
+    season_codes: ["202503"]
+}
+
+const CPSC_3230 = 
+{
+    codes: ["CPSC 3230"],
+    title: "Introduction to Systems Programming and Computer Organization",
+    credit: 1,
+    dist: ["QR"],
+    seasons: ["Fall"],
+    season_codes: ["202503"]
+}
+
+const CPSC_3650 = 
+{
+    codes: ["CPSC 3650", "ECON 3365"],
+    title: "Algorithms",
+    credit: 1,
+    dist: ["QR"],
+    seasons: ["Fall"],
+    season_codes: ["202503"]
+}
+
+const CPSC_4900 = 
+{
+    codes: ["CPSC 4900"],
+    title: "Senior Project",
+    credit: 1,
+    dist: [],
+    seasons: ["Fall"],
+    season_codes: ["202503"]
+}
+
+/*export const general_requirements_progress: MajorProgress = {
+    name: "General Requirements",
+    totalCourses: 13, 
+    totalRequirementGroups: 6, 
+    //totalCompletedCourses: 5, 
     totalCompletedRequirementGroups: 0,
-    requirementsProgress: [    
+    requirements: [    
         {
-           ...general_requirements.requirements[0],
+            type: "category-requirement", 
+            category: "Hu",
+            description: "Humanity", 
+            requiredNum: 2,
             completedCourses:[studentCourse, null],
             isFinished: false
         },  
 
         {
-           ...general_requirements.requirements[1],
+           type: "category-requirement", 
+            category: "Sc",
+            description: "Science", 
+            requiredNum: 2,
             completedCourses:[studentCourse, null],
             isFinished: false
 
         },  
 
         {
-            ...general_requirements.requirements[2],
+            type: "category-requirement", 
+            category: "So",
+            description: "Social Science", 
+            requiredNum: 2,
             completedCourses:[studentCourse, null],
             isFinished: false
         },  
 
         {
-           ...general_requirements.requirements[3],
+            type: "category-requirement", 
+            category: "QR",
+            description: "Quantitative Reasoning", 
+            requiredNum: 2,
             completedCourses:[studentCourse, null],
             isFinished: false
         },  
 
         {
-           ...general_requirements.requirements[4],
+           type: "category-requirement", 
+            category: "WR",
+            description: "Writing", 
+            requiredNum: 2,
             completedCourses:[studentCourse, null],
             isFinished: false
         },
 
         {
-          ...general_requirements.requirements[5],
+            type: "progression-requirement",
+            description: "Language (L1)", 
+            languageCode: "CHNS",
+            levelDist: ["L1", "L2", "L3"],
             completedCourses: [studentCourse, null, null], 
             isFinished: false
         }
     ]
        
-}
+}*/
+
+export const general_requirements_progress: MajorProgress = {
+    name: "General Requirements",
+    totalCourses: 13,
+    totalCompletedCourses: 5,
+    totalRequirementGroups: 6,
+    totalCompletedRequirementGroups: 0,
+    requirements: [
+        {
+            description: "Humanity",
+            requiredNum: 2, // Need 2 course items to complete this group
+            courseItems: [
+                {
+                    type: "category-choice",
+                    category: ["Hu"],
+                    isCompleted: true,
+                    completedCourses: [studentCourse]
+                },
+                {
+                    type: "category-choice",
+                    category: ["Hu"],
+                    isCompleted: false,
+                    completedCourses: []
+                }
+            ],
+            isCompleted: false,
+            completedNum: 1 // 1 out of 2 course items completed
+        },
+        {
+            description: "Science",
+            requiredNum: 2,
+            courseItems: [
+                {
+                    type: "category-choice",
+                    category: ["Sc"],
+                    isCompleted: true,
+                    completedCourses: [studentCourse]
+                },
+                {
+                    type: "category-choice",
+                    category: ["Sc"],
+                    isCompleted: false,
+                    completedCourses: []
+                }
+            ],
+            isCompleted: false,
+            completedNum: 1
+        },
+        {
+            description: "Social Science",
+            requiredNum: 2,
+            courseItems: [
+                {
+                    type: "category-choice",
+                    category: ["So"],
+                    isCompleted: true,
+                    completedCourses: [studentCourse]
+                },
+                {
+                    type: "category-choice",
+                    category: ["So"],
+                    isCompleted: false,
+                    completedCourses: []
+                }
+            ],
+            isCompleted: false,
+            completedNum: 1
+        },
+        {
+            description: "Quantitative Reasoning",
+            requiredNum: 2,
+            courseItems: [
+                {
+                    type: "category-choice",
+                    category: ["QR"],
+                    isCompleted: true,
+                    completedCourses: [studentCourse]
+                },
+                {
+                    type: "category-choice",
+                    category: ["QR"],
+                    isCompleted: false,
+                    completedCourses: []
+                }
+            ],
+            isCompleted: false,
+            completedNum: 1
+        },
+        {
+            description: "Writing",
+            requiredNum: 2,
+            courseItems: [
+                {
+                    type: "category-choice",
+                    category: ["WR"],
+                    isCompleted: true,
+                    completedCourses: [studentCourse]
+                },
+                {
+                    type: "category-choice",
+                    category: ["WR"],
+                    isCompleted: false,
+                    completedCourses: []
+                }
+            ],
+            isCompleted: false,
+            completedNum: 1
+        },
+        {
+            description: "Language (L1)",
+            requiredNum: 3,
+            courseItems: [
+                {
+                    type: "language-choice",
+                    category: ["L1"],
+                    subjectCodes: ["CHNS"],
+                    isCompleted: false,
+                    completedCourses: []
+                },
+                {
+                    type: "language-choice",
+                    category: ["L2"],
+                    subjectCodes: ["CHNS"],
+                    isCompleted: false,
+                    completedCourses: []
+                },
+                {
+                    type: "language-choice",
+                    category: ["L3"],
+                    subjectCodes: ["CHNS"],
+                    isCompleted: false,
+                    completedCourses: []
+                }
+            ],
+            isCompleted: false,
+            completedNum: 0
+        }
+    ]
+};
+
 
 export const cs_requirements_bs_progress: MajorProgress = {
-    ...cs_requirements_bs,
+    name: "Computer Science B.S.",
+    totalCourses: 12,
+    totalRequirementGroups: 3,
+    totalCompletedCourses: 0,
+    totalCompletedRequirementGroups: 0,
+    requirements: [ // Changed from requirementsProgress to requirements
+        {
+            description: "Core Requirements",
+            requiredNum: 5, // Need all 5 core courses
+            courseItems: [
+                {
+                    type: "multi-choice",
+                    courseCodes: ["CPSC 2010"], // Single option, but using multi-choice structure
+                    isCompleted: false,
+                    completedCourses: []
+                },
+                {
+                    type: "multi-choice",
+                    courseCodes: ["CPSC 2020"],
+                    isCompleted: false,
+                    completedCourses: []
+                },
+                {
+                    type: "multi-choice",
+                    courseCodes: ["CPSC 2230"],
+                    isCompleted: false,
+                    completedCourses: []
+                },
+                {
+                    type: "multi-choice",
+                    courseCodes: ["CPSC 3230"],
+                    isCompleted: false,
+                    completedCourses: []
+                },
+                {
+                    type: "multi-choice",
+                    courseCodes: ["CPSC 3650"],
+                    isCompleted: false,
+                    completedCourses: []
+                }
+            ],
+            isCompleted: false,
+            completedNum: 0
+        },
+        {
+            description: "Electives",
+            requiredNum: 6, // Need 6 elective courses
+            courseItems: [
+                {
+                    type: "level-choice",
+                    subjectCode: ["CPSC"],
+                    level: 3000,
+                    isCompleted: false,
+                    completedCourses: []
+                },
+                {
+                    type: "level-choice",
+                    subjectCode: ["CPSC"],
+                    level: 3000,
+                    isCompleted: false,
+                    completedCourses: []
+                },
+                {
+                    type: "level-choice",
+                    subjectCode: ["CPSC"],
+                    level: 3000,
+                    isCompleted: false,
+                    completedCourses: []
+                },
+                {
+                    type: "level-choice",
+                    subjectCode: ["CPSC"],
+                    level: 3000,
+                    isCompleted: false,
+                    completedCourses: []
+                },
+                {
+                    type: "level-choice",
+                    subjectCode: ["CPSC"],
+                    level: 3000,
+                    isCompleted: false,
+                    completedCourses: []
+                },
+                {
+                    type: "level-choice",
+                    subjectCode: ["CPSC"],
+                    level: 3000,
+                    isCompleted: false,
+                    completedCourses: []
+                }
+            ],
+            isCompleted: false,
+            completedNum: 0
+        },
+        {
+            description: "Senior Project",
+            requiredNum: 1, // Need 1 senior project
+            courseItems: [
+                {
+                    type: "multi-choice",
+                    courseCodes: ["CPSC 4900"],
+                    isCompleted: false,
+                    completedCourses: []
+                }
+            ],
+            isCompleted: false,
+            completedNum: 0
+        }
+    ]
+};
+
+export const cs_requirements_ba_progress: MajorProgress = {
+    name: "Computer Science B.A.",
+    totalCourses: 10,
+    totalRequirementGroups: 3,
     totalCompletedCourses: 0, 
     totalCompletedRequirementGroups: 0,
     requirementsProgress: [
         {
-            ...cs_requirements_bs.requirements[0],
+           type: "course-requirement", 
+            description: "Core Requirements",
+            courses: [
+                {type: "single", courses: [CPSC_2010]},
+                {type: "single", courses: [CPSC_2020]},
+                {type: "single", courses: [CPSC_2230]},
+                {type: "single", courses: [CPSC_3230]},
+                {type: "single", courses: [CPSC_3650]}
+            ],
             completedCourses: [null, null, null, null, null],
             isFinished: false
         },
         {
-          ...cs_requirements_bs.requirements[1],
-            completedCourses: [null, null, null, null, null],
+            type: "elective-requirement", 
+            description: "Electives", 
+            subjectCodes: ["CPSC"], 
+            minLevel: 3000, 
+            requiredNum: 4,
+            completedCourses: [null, null, null, null],
             isFinished: false
         },  
          {
-           ...cs_requirements_bs.requirements[2],
+            type: "course-requirement", 
+            description: "Senior Project", 
+            courses: [
+                {type: "single", courses: [CPSC_4900]}
+            ],
             completedCourses: [null],
             isFinished: false
         }  

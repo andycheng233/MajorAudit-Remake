@@ -1,22 +1,51 @@
-import { mockCourses } from "../data/mock_courses";
 import { type StudentSemester } from "../types/type-user";
 import { addSemester } from "../utils/userDataHelpers";
 
 import CourseOutput from "../components/CourseOutput";
 import SemesterOutput from "../components/SemesterOutput";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../contexts/UserContext";
 import React, { useState } from "react";
 
 import pencilIcon from "../assets/pencil.svg";
 import addSemesterIcon from "../assets/addSemester.svg";
 
+import { useApp } from "../contexts/AppContext";
+
 function CoursePlanning() {
   const { userData, setUserData } = useUser();
+  const { appData } = useApp();
   const [formData, setFormData] = useState({
     term: -1,
     year: -1,
     title: "",
   });
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  //show first 500 courses --> we gonna assume they are not looking through courses but searching to add in general
+
+  if (!appData) {
+    return <div>Loading courses and majors...</div>;
+  }
+
+  const searchNormalized = searchTerm.toLowerCase().replace(/\s+/g, "");
+
+  const filteredCourses = appData.courses.filter(
+    (course) =>
+      course.title
+        .toLowerCase()
+        .replace(/\s+/g, "")
+        .includes(searchNormalized) ||
+      /*course.codes.some((code) =>
+        code.toLowerCase().replace(/\s+/g, "").includes(searchNormalized)
+      )*/
+      course.codes[0]
+        .toLowerCase()
+        .replace(/\s+/g, "")
+        .includes(searchNormalized)
+  );
+
+  const slicedCourses = filteredCourses.slice(0, 250);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -28,6 +57,7 @@ function CoursePlanning() {
     }));
   };
 
+  //
   const handleInputSubmit = () => {
     if (
       !(
@@ -41,12 +71,19 @@ function CoursePlanning() {
       return;
     }
 
+    let year = Number(formData.year);
+    if (Number(formData.term) == 2 || Number(formData.term) == 1) year += 1;
+
+    let test = Number(`${year}${formData.term}`);
+
     const newSemester: StudentSemester = {
       title: formData.title,
-      season: Number(`${formData.year}${formData.term}`),
+      season: Number(`${year}${formData.term}`),
       studentCourses: [],
       isCompleted: false,
     };
+
+    console.log("added %d\n", test);
 
     setUserData(addSemester(userData, newSemester));
   };
@@ -63,10 +100,11 @@ function CoursePlanning() {
             placeholder="Search by course code, title, prof..."
             className="px-4 py-2 border-b-4 border-gray-200 bg-blue-100 placeholder-shown:bg-white w-full focus:outline-none focus:bg-gray-100
              transition-colors duration-200 ease-in-out border-t-2"
+            onChange={(search) => setSearchTerm(search.target.value)}
           />
           <div className="overflow-y-auto flex-1 pb-2">
             <ul className="flex flex-col p-2 w-full gap-4">
-              {mockCourses.map((course, index) => (
+              {slicedCourses.map((course, index) => (
                 <li key={index}>
                   <CourseOutput course={course} draggable={true} />
                 </li>
@@ -113,9 +151,9 @@ function CoursePlanning() {
               }}
             >
               <option value="">Select a term</option>
-              <option value="01">Fall</option>
-              <option value="02">Spring</option>
-              <option value="03">Summer</option>
+              <option value="03">Fall</option>
+              <option value="01">Spring</option>
+              <option value="02">Summer</option>
             </select>
             <select
               className="px-4 py-2 border rounded-md text-center"

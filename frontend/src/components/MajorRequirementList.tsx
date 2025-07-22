@@ -1,73 +1,67 @@
 import {
   type MajorProgress,
-  type MajorProgressType,
+  type GroupItemProgress,
 } from "../types/type-program";
 
 import { useState } from "react";
 
 interface ClassRequirementMapProps {
-  reqProgressGroup: MajorProgressType;
+  reqProgressGroup: GroupItemProgress;
 }
 
 function ClassRequirementMap({ reqProgressGroup }: ClassRequirementMapProps) {
   let requirements: string[] = [];
 
-  switch (reqProgressGroup.type) {
-    case "course-requirement":
-      requirements = reqProgressGroup.courses.map((item) => {
-        if (item.type === "multi") {
-          // Multi-course: show as "CPSC 202 or MATH 244"
-          return item.courses.map((course) => course.codes[0]).join(" or ");
-        } else {
-          // Single course: show as "CPSC 201"
-          return item.courses[0].codes[0];
-        }
-      });
-      break;
+  requirements = reqProgressGroup.courseItems.map((item) => {
+    switch (item.type) {
+      case "single-choice":
+        return `${item.courseCode}`;
+      case "multi-choice":
+        // Show as "CPSC 202 or MATH 244 (choose 1)"
+        return `${item.courseCodes.join(" or ")}`;
 
-    case "group-requirement":
-      requirements = reqProgressGroup.courses.map((item) => {
-        if (item.type === "multi") {
-          return item.courses.map((course) => course.codes[0]).join(" or ");
-        } else {
-          return item.courses[0].codes[0];
-        }
-      });
-      break;
+      case "combo-choice":
+        // Show as "MATH 1100 + MATH 1110 (counts as 1)"
+        return `${item.courseCodes.join(" + ")} (counts as ${item.countAs})`;
 
-    case "elective-requirement":
-      requirements = Array(reqProgressGroup.requiredNum).fill(
-        `${reqProgressGroup.codes[0]} course ≥ level ${reqProgressGroup.minLevel}`
-      );
-      break;
+      case "range-choice":
+        // Show as "2 courses from ECON 4400-4491"
+        const subjects = item.subjectCode.join("/");
+        return `Course from ${subjects} ${item.minLevel}-${item.maxLevel}`;
 
-    case "category-requirement":
-      requirements = Array(reqProgressGroup.requiredNum).fill(
-        `${reqProgressGroup.category} Course`
-      );
-      break;
+      case "level-choice":
+        // Show as "Any MATH course ≥ level 2000"
+        const subjectCodes = item.subjectCode.join("/");
+        return `Course from ${subjectCodes} ≥ level ${item.level}`;
 
-    case "progression-requirement":
-      requirements = reqProgressGroup.levelDist.map((item) => {
-        return reqProgressGroup.languageCode + " " + item;
-      });
-      break;
+      case "category-choice":
+        // Show as "2 Writing Intensive courses"
+        const categories = item.category.join("/");
+        return `${categories} course`;
 
-    default:
-      window.alert("error");
-  }
+      case "language-choice":
+        // Show as "2 Spanish language courses from SPAN"
+        const langCategories = item.category.join("/");
+        const langSubjects = item.subjectCodes.join("/");
+        return `${langCategories} course from ${langSubjects}`;
+
+      default:
+        console.error(`Unknown course item type`);
+        return "Unknown requirement type";
+    }
+  });
 
   // Pair requirements with their fulfillment status
   const maxLength = Math.max(
     requirements.length,
-    reqProgressGroup.completedCourses.length
+    reqProgressGroup.completedNum
   );
   const pairs = [];
 
   for (let i = 0; i < maxLength; i++) {
     pairs.push({
       requirement: requirements[i] || null,
-      fulfillment: reqProgressGroup.completedCourses[i] || null,
+      fulfillment: reqProgressGroup.courseItems[i]?.completedCourses[0] || null,
     });
   }
 
@@ -161,112 +155,71 @@ function MajorRequirementList({ major_progress }: MajorReqListProps) {
       case "requirements":
         return (
           <ul className="flex-1 overflow-y-auto p-2">
-            {major_progress.requirementsProgress.map(
-              (reqProgressGroup, index) => {
-                const isExpanded = expandedIndex === index;
-                let remainingCourses = 0;
+            {major_progress.requirements.map((reqProgressGroup, index) => {
+              const isExpanded = expandedIndex === index;
+              let remainingRequirements = 0;
+              let descriptionText = "";
 
-                let descriptionText = "";
-                switch (reqProgressGroup.type) {
-                  case "course-requirement":
-                    descriptionText = "Must complete all courses within";
-                    remainingCourses =
-                      reqProgressGroup.courses.length -
-                      reqProgressGroup.completedCourses.filter(
-                        (course) => course !== null
-                      ).length;
-                    break;
+              if (
+                reqProgressGroup.requiredNum ==
+                reqProgressGroup.courseItems.length
+              )
+                descriptionText = "Must complete all requirements within";
+              else
+                descriptionText = `Must complete ${reqProgressGroup.requiredNum} requiremets`;
 
-                  case "group-requirement":
-                    descriptionText = "Must complete all courses within";
-                    remainingCourses =
-                      reqProgressGroup.courses.length -
-                      reqProgressGroup.completedCourses.filter(
-                        (course) => course !== null
-                      ).length;
-                    break;
+              remainingRequirements =
+                reqProgressGroup.requiredNum - reqProgressGroup.completedNum;
 
-                  case "elective-requirement":
-                    descriptionText = `Must complete ${reqProgressGroup.requiredNum} ${reqProgressGroup.codes[0]} courses ≥ level ${reqProgressGroup.minLevel}`;
-                    remainingCourses =
-                      reqProgressGroup.requiredNum -
-                      reqProgressGroup.completedCourses.filter(
-                        (course) => course !== null
-                      ).length;
-                    break;
+              return (
+                <li key={index} className="m-2">
+                  <div
+                    className="bg-gray-100 border-gray-200 border-2 rounded-md cursor-pointer hover:bg-gray-200 transition-colors text-center flex-row items-center justify-center p-1"
+                    onClick={() => toggleExpanded(index)}
+                  >
+                    <div className="flex flex-row gap-4 items-start w-full">
+                      <div
+                        className={`w-6 h-6 border-2 rounded-sm mt-1 ml-1 shrink-0 flex justify-center items-center text-center${
+                          reqProgressGroup.isCompleted
+                            ? "border-green-500 bg-green-500"
+                            : "bg-gray-100 border-red-600 text-red-600 font-medium"
+                        }`}
+                      >
+                        {remainingRequirements > 0 ? remainingRequirements : ""}
+                      </div>
 
-                  case "category-requirement":
-                    descriptionText = `Must complete ${reqProgressGroup.requiredNum} ${reqProgressGroup.category} courses`;
-                    remainingCourses =
-                      reqProgressGroup.requiredNum -
-                      reqProgressGroup.completedCourses.filter(
-                        (course) => course !== null
-                      ).length;
-                    break;
+                      <div className="flex flex-col flex-grow">
+                        <span className="font-medium">
+                          {reqProgressGroup.description}
+                        </span>
+                        <span className="text-sm text-gray-500">
+                          {descriptionText}
+                        </span>
+                      </div>
 
-                  case "progression-requirement":
-                    descriptionText = "Must complete all courses within";
-                    remainingCourses =
-                      reqProgressGroup.levelDist.length -
-                      reqProgressGroup.completedCourses.filter(
-                        (course) => course !== null
-                      ).length;
-                    break;
-
-                  default:
-                    window.alert("error");
-                }
-
-                return (
-                  <li key={index} className="m-2">
-                    <div
-                      className="bg-gray-100 border-gray-200 border-2 rounded-md cursor-pointer hover:bg-gray-200 transition-colors text-center flex-row items-center justify-center p-1"
-                      onClick={() => toggleExpanded(index)}
-                    >
-                      <div className="flex flex-row gap-4 items-start w-full">
-                        <div
-                          className={`w-6 h-6 border-2 rounded-sm mt-1 ml-1 shrink-0 flex justify-center items-center text-center${
-                            reqProgressGroup.isFinished
-                              ? "border-green-500 bg-green-500"
-                              : "bg-gray-100 border-red-600 text-red-600 font-medium"
-                          }`}
-                        >
-                          {remainingCourses > 0 ? remainingCourses : ""}
-                        </div>
-
-                        <div className="flex flex-col flex-grow">
-                          <span className="font-medium">
-                            {reqProgressGroup.description}
-                          </span>
-                          <span className="text-sm text-gray-500">
-                            {descriptionText}
-                          </span>
-                        </div>
-
-                        <div
-                          className="text-gray-500 transition-transform duration-200"
-                          style={{
-                            transform: isExpanded
-                              ? "rotate(180deg)"
-                              : "rotate(0deg)",
-                          }}
-                        >
-                          ▼
-                        </div>
+                      <div
+                        className="text-gray-500 transition-transform duration-200"
+                        style={{
+                          transform: isExpanded
+                            ? "rotate(180deg)"
+                            : "rotate(0deg)",
+                        }}
+                      >
+                        ▼
                       </div>
                     </div>
+                  </div>
 
-                    {isExpanded && (
-                      <div className="transition-all duration-300 ease-in-out">
-                        <ClassRequirementMap
-                          reqProgressGroup={reqProgressGroup}
-                        />
-                      </div>
-                    )}
-                  </li>
-                );
-              }
-            )}
+                  {isExpanded && (
+                    <div className="transition-all duration-300 ease-in-out">
+                      <ClassRequirementMap
+                        reqProgressGroup={reqProgressGroup}
+                      />
+                    </div>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         );
       case "progress":

@@ -1,5 +1,8 @@
 
 import { type Course, type StudentCourse } from "./type-user";
+import { CourseDatabase } from "../services/CourseDatabase";
+import type { MajorProcessor } from "../services/MajorProcessor";
+// also have to import MajorResolver
 
 interface DUS {
 	name: string;
@@ -58,94 +61,146 @@ export interface StudentDegree {
 	degreeIndex: number;
 }
 
-// for both single courses and multi courses, example: you can either take CPSC 202 or MATH 244
-interface CourseItem {
-	type: 'single' | 'multi';
-	courses: Course[];
+// Major templates for outlining major requirements and basic display --> when you view majors, it will auto make a Major Progerssion object to see requirements + progress
+
+// CourseItemTemplate --> make it one with multiple selection options... also have a display function feature
+// CourseItemProgress --> for major showing... only difference is that it shows if its completed... extend the original
+// GroupItemTemplate --> has multiple CourseItems + title + description + number of courses
+// GroupItemProgress --> extends with completedNumberOfCourses
+
+/*
+ multi-choice --> choose # from these options
+ combo-choice --> these courses count as #
+ range-choice --> need # of courses of subject code ? between min and max range
+ level-choice --> need # of courses of subject code ? above this level
+ category-choice --> need # of courses of category ?
+ language-choice --> need # of courses of category ? and subject code ?
+ */
+
+ // make helper function for writing descriptions
+
+interface SingleChoiceCourseItemTemplate {
+	type: "single-choice";
+	courseCode: string;
 }
 
-interface BaseRequirement {
-	type: string;
-	description: string;
+interface SingleChoiceCourseItemProgress extends SingleChoiceCourseItemTemplate {
+	isCompleted: boolean;
+	completedCourses: StudentCourse[];
 }
 
-//make a choose class --> goes through classes to fetch the correct data
-
-// if you need to complete certain pre-req, course requirements...
- interface CourseRequirement extends BaseRequirement {
-	type:"course-requirement"
-	courses: (CourseItem)[];
+interface MultiChoiceCourseItemTemplate {
+	type: "multi-choice";
+	courseCodes: string[];
 }
 
-interface CourseRequirementProgress extends CourseRequirement {
-	completedCourses: (StudentCourse | null)[];
-	isFinished: boolean;
+interface MultiChoiceCourseItemProgress extends MultiChoiceCourseItemTemplate {
+	isCompleted: boolean;
+	completedCourses: StudentCourse[];
 }
 
-// choose 2 out of these 3 courses
-interface GroupRequirement extends BaseRequirement {
-	type: "group-requirement";
-	requiredNum: number;
-	courses: (CourseItem)[];
+interface ComboChoiceCourseItemTemplate {
+	type: "combo-choice";
+	courseCodes: string[];
+	countAs: number;
 }
 
-interface GroupRequirementProgress extends GroupRequirement {
-	completedCourses: (StudentCourse | null)[];
-	isFinished: boolean;
+interface ComboChoiceCourseItemProgress extends ComboChoiceCourseItemTemplate {
+	isCompleted: boolean;
+	completedCourses: StudentCourse[];
 }
 
-interface CategoryRequirement extends BaseRequirement {
-	type:"category-requirement";
-	category:string;
-	requiredNum: number;
-}
-
-interface CategoryRequirementProgress extends CategoryRequirement {
-	completedCourses: (StudentCourse | null)[];
-	isFinished: boolean;
-}
-
-interface ElectiveRequirement extends BaseRequirement {
-	type:"elective-requirement";
-	codes: string[];
+interface RangeChoiceCourseItemTemplate {
+	type: "range-choice";
+	subjectCode: string[];
 	minLevel: number;
+	maxLevel: number;
+}
+
+interface RangeChoiceCourseItemProgress extends RangeChoiceCourseItemTemplate {
+	isCompleted: boolean;
+	completedCourses: StudentCourse[];
+}
+
+interface LevelChoiceCourseItemTemplate {
+	type: "level-choice";
+	subjectCode: string[];
+	level: number;
+}
+
+interface LevelChoiceCourseItemProgress extends LevelChoiceCourseItemTemplate {
+	isCompleted: boolean;
+	completedCourses: StudentCourse[];
+}
+
+interface CategoryChoiceCourseItemTemplate {
+	type: "category-choice";
+	category: string[];
+}
+
+interface CategoryChoiceCourseItemProgress extends CategoryChoiceCourseItemTemplate {
+	isCompleted: boolean;
+	completedCourses: StudentCourse[];
+}
+
+interface LanguageChoiceCourseItemTemplate {
+	type: "language-choice"; 
+	category: string[];
+	subjectCodes: string[];
+}
+
+interface LanguageChoiceCourseItemProgress extends LanguageChoiceCourseItemTemplate {
+	isCompleted: boolean;
+	completedCourses: StudentCourse[];
+}
+
+// Union types for polymorphism
+export type CourseItemTemplateType = 
+	| SingleChoiceCourseItemProgress
+	| MultiChoiceCourseItemTemplate
+	| ComboChoiceCourseItemTemplate
+	| RangeChoiceCourseItemTemplate
+	| LevelChoiceCourseItemTemplate
+	| CategoryChoiceCourseItemTemplate
+	| LanguageChoiceCourseItemTemplate;
+
+export type CourseItemProgressType = 
+	| SingleChoiceCourseItemProgress
+	| MultiChoiceCourseItemProgress
+	| ComboChoiceCourseItemProgress
+	| RangeChoiceCourseItemProgress
+	| LevelChoiceCourseItemProgress
+	| CategoryChoiceCourseItemProgress
+	| LanguageChoiceCourseItemProgress;
+
+export interface GroupItemTemplate {
+	description: string;
 	requiredNum: number;
+	courseItems: CourseItemTemplateType[];
 }
 
-interface ElectiveRequirementProgress extends ElectiveRequirement {
-	completedCourses: (StudentCourse | null)[];
-	isFinished: boolean;
+export interface GroupItemProgress extends GroupItemTemplate {
+	courseItems: CourseItemProgressType[];
+	isCompleted: boolean;
+	completedNum: number;
 }
 
-interface ProgressionRequirement extends BaseRequirement {
-	type: "progression-requirement";
-	languageCode: string;
-	levelDist: string[];
-}
-
-interface ProgressionRequirementProgress extends ProgressionRequirement {
-	completedCourses: (StudentCourse | null)[];
-	isFinished: boolean;
-}
-
-export type MajorRequirementType = (CourseRequirement | GroupRequirement |  CategoryRequirement | ElectiveRequirement | ProgressionRequirement);
-export type MajorProgressType = (CourseRequirementProgress | GroupRequirementProgress |  CategoryRequirementProgress | ElectiveRequirementProgress | ProgressionRequirementProgress)
-
-
-export type MajorRequirement = {
+export interface MajorTemplate {
 	name: string;
 	totalCourses: number;
 	totalRequirementGroups: number;
-	requirements: MajorRequirementType[];
-}; 
+	requirements: GroupItemTemplate[];
+};
 
-export type MajorProgress = {
-	name: string;
-	totalCourses: number;
+export interface MajorProgress extends MajorTemplate {
+	requirements: GroupItemProgress[];
 	totalCompletedCourses: number;
-	totalRequirementGroups: number;
 	totalCompletedRequirementGroups: number;
-	requirementsProgress: MajorProgressType[];
-}; 
+};
 
-
+export interface AppData {
+	courses: Course[];
+	major_templates: MajorTemplate[];
+	course_database: CourseDatabase;
+	major_processor: MajorProcessor;
+}

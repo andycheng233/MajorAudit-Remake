@@ -1,5 +1,5 @@
 
-import { type DegreeConfiguration, type MajorRequirement, type MajorProgress, type StudentDegree} from "./type-program";
+import { type DegreeConfiguration, type MajorTemplate, type MajorProgress, type StudentDegree} from "./type-program";
 
 export interface Course {
   codes: string[]; 		// ["FREN 403", "HUMS 409"]
@@ -7,6 +7,7 @@ export interface Course {
   credit: number; 		// 1
   dist: string[]; 		// ["Hu"]
   seasons: string[]; 	// ["Spring"]
+  season_codes: string[]; // ["202601", "202503"]
 }
 
 export interface StudentCourse {
@@ -15,6 +16,7 @@ export interface StudentCourse {
   status: string; 	// "DA_COMPLETE" | "DA_PROSPECT" | "MA_VALID" | "MA_HYPOTHETICAL"
 }
 
+// 01 - spring, 02 - summer, 03 - fall
 export interface StudentSemester {
     season: number;
     title: string;
@@ -41,8 +43,6 @@ export interface FYP {
 	//degreeConfigurations: DegreeConfiguration[][];
 	//degreeDeclarations: StudentDegree[];
 }
-
-
 
 export interface User {
 	name: string;
