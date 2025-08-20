@@ -5,9 +5,8 @@ import type { MajorProcessor } from "../services/MajorProcessor";
 // also have to import MajorResolver
 
 interface DUS {
-	name: string;
-	address: string;
-	email: string;
+	name: string[];
+	email: string[];
 }
 
 interface DegreeMetadataStats {
@@ -25,40 +24,9 @@ export interface DegreeMetadata {
 	students: number;
 	about: string;
 	dus: DUS;
-	catologLink: string;
-	wesbiteLink: string;
-}
-
-// \BEGIN{MAJOR MAGIC}
-
-interface DegreeRequirementsSubsection {
-	name?: string;
-	description?: string;
-	flexible: boolean;
-	courses: StudentCourse[];
-}
-
-interface DegreeRequirement {
-	name: string;
-	description?: string;
-	subsections: DegreeRequirementsSubsection[];
-}
-
-export interface DegreeConfiguration {
-	degreeRequirements: DegreeRequirement[];
-}
-
-export interface Degree {
-	metadata: DegreeMetadata;
-	configuration: DegreeConfiguration;
-}
-
-// \END{MAJOR MAGIC}
-
-export interface StudentDegree {
-	status: string; // DA | ADD | PIN
-	programIndex: number;
-	degreeIndex: number;
+	catalogLink: string;
+	websiteLink: string;
+	majorEmail: string;
 }
 
 // Major templates for outlining major requirements and basic display --> when you view majors, it will auto make a Major Progerssion object to see requirements + progress
@@ -190,6 +158,7 @@ export interface MajorTemplate {
 	totalCourses: number;
 	totalRequirementGroups: number;
 	requirements: GroupItemTemplate[];
+	info: DegreeMetadata;
 };
 
 export interface MajorProgress extends MajorTemplate {

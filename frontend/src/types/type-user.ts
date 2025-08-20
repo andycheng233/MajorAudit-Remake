@@ -1,5 +1,5 @@
 
-import { type DegreeConfiguration, type MajorTemplate, type MajorProgress, type StudentDegree} from "./type-program";
+import {type MajorTemplate, type MajorProgress} from "./type-program";
 
 export interface Course {
   codes: string[]; 		// ["FREN 403", "HUMS 409"]

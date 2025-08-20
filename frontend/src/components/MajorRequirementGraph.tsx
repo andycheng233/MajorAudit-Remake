@@ -1,4 +1,5 @@
 import type { MajorProgress, GroupItemProgress } from "../types/type-program";
+import { formatCourseItemTypes } from "../utils/formatHelpers";
 
 interface ClassRequirementMapProps {
   reqProgressGroup: GroupItemProgress;
@@ -7,44 +8,7 @@ interface ClassRequirementMapProps {
 function ClassRequirementMap({ reqProgressGroup }: ClassRequirementMapProps) {
   let requirements: string[] = [];
 
-  requirements = reqProgressGroup.courseItems.map((item) => {
-    switch (item.type) {
-      case "single-choice":
-        return `${item.courseCode}`;
-      case "multi-choice":
-        // Show as "CPSC 202 or MATH 244 (choose 1)"
-        return `${item.courseCodes.join(" or ")}`;
-
-      case "combo-choice":
-        // Show as "MATH 1100 + MATH 1110 (counts as 1)"
-        return `${item.courseCodes.join(" + ")} (counts as ${item.countAs})`;
-
-      case "range-choice":
-        // Show as "2 courses from ECON 4400-4491"
-        const subjects = item.subjectCode.join("/");
-        return `Course from ${subjects} ${item.minLevel}-${item.maxLevel}`;
-
-      case "level-choice":
-        // Show as "Any MATH course ≥ level 2000"
-        const subjectCodes = item.subjectCode.join("/");
-        return `Course from ${subjectCodes} ≥ level ${item.level}`;
-
-      case "category-choice":
-        // Show as "2 Writing Intensive courses"
-        const categories = item.category.join("/");
-        return `${categories} course`;
-
-      case "language-choice":
-        // Show as "2 Spanish language courses from SPAN"
-        const langCategories = item.category.join("/");
-        const langSubjects = item.subjectCodes.join("/");
-        return `${langCategories} course from ${langSubjects}`;
-
-      default:
-        console.error(`Unknown course item type`);
-        return "Unknown requirement type";
-    }
-  });
+  requirements = formatCourseItemTypes(reqProgressGroup);
 
   // Pair requirements with their fulfillment status
   const maxLength = Math.max(

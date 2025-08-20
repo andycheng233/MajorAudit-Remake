@@ -1,4 +1,5 @@
 import DistributionOutput from "../components/DistributionOutput";
+import type { GroupItemProgress } from "../types/type-program";
 
 export function formatSeason(seasons: string[]) {
   let output = "";
@@ -44,4 +45,56 @@ export function formatC_P_UP(
       </div>
     </div>
   );
+}
+
+export function formatCourseItemTypes(group: GroupItemProgress) {
+  let requirements = group.courseItems.map((item) => {
+    switch (item.type) {
+      case "single-choice":
+        return `${item.courseCode}`;
+      case "multi-choice":
+      case "multi-choice":
+        const codes = item.courseCodes;
+        if (codes.length === 2) {
+          return `${codes[0]} or ${codes[1]}`;
+        } else if (codes.length > 2) {
+          const allButLast = codes.slice(0, -1).join(", ");
+          const last = codes[codes.length - 1];
+          return `${allButLast}, or ${last}`;
+        } else {
+          return codes[0] || "";
+        }
+
+      case "combo-choice":
+        // Show as "MATH 1100 + MATH 1110 (counts as 1)"
+        return `${item.courseCodes.join(" + ")} (counts as ${item.countAs})`;
+
+      case "range-choice":
+        // Show as "2 courses from ECON 4400-4491"
+        const subjects = item.subjectCode.join("/");
+        return `${subjects} course ${item.minLevel}-${item.maxLevel}`;
+
+      case "level-choice":
+        // Show as "Any MATH course ≥ level 2000"
+        const subjectCodes = item.subjectCode.join("/");
+        return `${subjectCodes} course ≥ ${item.level}`;
+
+      case "category-choice":
+        // Show as "2 Writing Intensive courses"
+        const categories = item.category.join("/");
+        return `${categories} course`;
+
+      case "language-choice":
+        // Show as "2 Spanish language courses from SPAN"
+        const langCategories = item.category.join("/");
+        const langSubjects = item.subjectCodes.join("/");
+        return `${langCategories} course from ${langSubjects}`;
+
+      default:
+        console.error(`Unknown course item type`);
+        return "Unknown requirement type";
+    }
+  });
+
+  return requirements;
 }

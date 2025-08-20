@@ -41,6 +41,7 @@ export class MajorProcessor {
         return {
         ...template,
         totalCompletedRequirementGroups: 0,
+        totalCompletedCourses: 0,
         requirements: template.requirements.map(req => this.processRequirement(req))
         };
     }

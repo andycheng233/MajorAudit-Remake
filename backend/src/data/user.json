@@ -1,0 +1,25 @@
+{
+  "name": "Andy Cheng",
+  "netID": "ac3499",
+  "onboard": true,
+  "FYP": {
+    "languageRequirement": "L1",
+    "studentSemesters": [
+      {
+        "season": 202401,
+        "courses": [
+          { "id": "CPSC 201", "grade": "A" },
+          { "id": "MATH 120", "grade": "A-" }
+        ]
+      }
+    ],
+    "degreeProgress": [
+        "general_requirements",
+        "cs_requirements_bs"
+    ],
+    "statCount": {
+      "majorNum": 1,
+      "certificateNum": 0
+    }
+  }
+}
