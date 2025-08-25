@@ -207,7 +207,12 @@ function Programs() {
                     <a href={selectedProgram.info.catalogLink}>MAJOR CATALOG</a>
                   </button>
                   <button className="border rounded px-3 py-1 text-sm">
-                    <a href={selectedProgram.info.wesbiteLink}>MAJOR WEBSITE</a>
+                    <a href={selectedProgram.info.websiteLink}>MAJOR WEBSITE</a>
+                  </button>
+                  <button className="border rounded px-3 py-1 text-sm">
+                    <a href={`mailto:${selectedProgram.info.majorEmail}`}>
+                      MAJOR EMAIL
+                    </a>
                   </button>
                 </div>
               </div>

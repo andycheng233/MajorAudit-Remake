@@ -95,7 +95,7 @@ export class MajorProcessor {
                 ...baseProgress
             };
             
-        case "language-choice":
+        case "designation-choice":
             return {
                 ...item,
                 ...baseProgress

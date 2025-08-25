@@ -84,7 +84,7 @@ export function formatCourseItemTypes(group: GroupItemProgress) {
         const categories = item.category.join("/");
         return `${categories} course`;
 
-      case "language-choice":
+      case "designation-choice":
         // Show as "2 Spanish language courses from SPAN"
         const langCategories = item.category.join("/");
         const langSubjects = item.subjectCodes.join("/");

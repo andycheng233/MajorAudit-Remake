@@ -111,13 +111,14 @@ interface CategoryChoiceCourseItemProgress extends CategoryChoiceCourseItemTempl
 	completedCourses: StudentCourse[];
 }
 
-interface LanguageChoiceCourseItemTemplate {
-	type: "language-choice"; 
+// for language (CHNS + L1) or for other designations (such as as AFAM + Hu)
+interface DesignationChoiceCourseItemTemplate {
+	type: "designation-choice"; 
 	category: string[];
 	subjectCodes: string[];
 }
 
-interface LanguageChoiceCourseItemProgress extends LanguageChoiceCourseItemTemplate {
+interface DesignationChoiceCourseItemProgress extends DesignationChoiceCourseItemTemplate {
 	isCompleted: boolean;
 	completedCourses: StudentCourse[];
 }
@@ -130,7 +131,7 @@ export type CourseItemTemplateType =
 	| RangeChoiceCourseItemTemplate
 	| LevelChoiceCourseItemTemplate
 	| CategoryChoiceCourseItemTemplate
-	| LanguageChoiceCourseItemTemplate;
+	| DesignationChoiceCourseItemTemplate;
 
 export type CourseItemProgressType = 
 	| SingleChoiceCourseItemProgress
@@ -139,7 +140,7 @@ export type CourseItemProgressType =
 	| RangeChoiceCourseItemProgress
 	| LevelChoiceCourseItemProgress
 	| CategoryChoiceCourseItemProgress
-	| LanguageChoiceCourseItemProgress;
+	| DesignationChoiceCourseItemProgress;
 
 export interface GroupItemTemplate {
 	description: string;
