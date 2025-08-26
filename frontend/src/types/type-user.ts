@@ -45,7 +45,8 @@ export interface FYP {
 }
 
 export interface User {
-	name: string;
+	first_name: string;
+  last_name: string;
 	netID: string;
 	onboard: boolean;
 	FYP: FYP;

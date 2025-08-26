@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'sslserver',
     'rest_framework',
-    'rest_framework_simplejwt',
     'django_cas_ng',
     'authentication',
     'worksheets',
@@ -142,37 +141,20 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# JWT Settings
-
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': True,
-
-    'AUTH_COOKIE': 'access_token',
-    'AUTH_COOKIE_DOMAIN': None,
-    'AUTH_COOKIE_SECURE': True,
-    'AUTH_COOKIE_HTTP_ONLY': True,
-    'AUTH_COOKIE_PATH': '/',
-    'AUTH_COOKIE_SAMESITE': 'Lax',
-
-    'REFRESH_COOKIE': 'refresh_token',
-    'REFRESH_COOKIE_DOMAIN': None,
-    'REFRESH_COOKIE_SECURE': True,
-    'REFRESH_COOKIE_HTTP_ONLY': True,
-    'REFRESH_COOKIE_PATH': '/',
-    'REFRESH_COOKIE_SAMESITE': 'Lax',
-}
-
-SECURE_SSL_REDIRECT = True
+# Session Settings
+SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SAMESITE = os.getenv('COOKIE_SAMESITE')
+SESSION_COOKIE_HTTPONLY = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_AGE = 86400
+SECURE_SSL_REDIRECT = True
 
 # REST Framework Settings
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'authentication.authentication.CookieJWTAuthentication',
+        "rest_framework.authentication.SessionAuthentication",
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -185,7 +167,6 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "https://localhost:5173",
     "https://127.0.0.1:5173",
-    FRONTEND_URL,
 ]
 
 CSRF_COOKIE_SECURE = True
@@ -200,7 +181,7 @@ CSRF_TRUSTED_ORIGINS = [
 # CAS Settings
 
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
+    "django.contrib.auth.backends.ModelBackend",
     'django_cas_ng.backends.CASBackend',
 )
 
