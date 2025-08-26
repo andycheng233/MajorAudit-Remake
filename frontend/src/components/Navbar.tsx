@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import sunIcon from "../assets/sun.svg";
+// import sunIcon from "../assets/sun.svg";
 
 function Navbar() {
   const location = useLocation();
@@ -17,12 +17,12 @@ function Navbar() {
           Major<span className="text-blue-500">Audit</span>
         </div>
         <div className="flex items-center justify-around gap-6 text-lg text-black">
-          <img
+          {/* <img
             src={sunIcon}
             alt="sun icon"
             className="w-9 h-9 cursor-pointer transition duration-300"
-          ></img>
-          <Link to="/" className={linkFormat("/")}>
+          ></img> */}
+          <Link to="/dashboard" className={linkFormat("/dashboard")}>
             Dashboard
           </Link>
           <Link to="/programs" className={linkFormat("/programs")}>

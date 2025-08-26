@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.7",
+    "@vitejs/plugin-basic-ssl": "^2.1.0",
     "clsx": "^2.1.1",
     "lottie-react": "^2.4.1",
     "react": "^19.1.0",
