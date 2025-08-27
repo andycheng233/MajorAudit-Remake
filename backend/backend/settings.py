@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-xi6c64lspji7t8=*zw04=915add(h!ox08q66jt&m^zbbi*@tx'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DJANGO_DEBUG") == "True"
@@ -190,3 +190,8 @@ CAS_LOGOUT_COMPLETELY = False
 CAS_VERSION = 2
 CAS_REDIRECT_URL = FRONTEND_URL
 CAS_LOGOUT_REDIRECT_URL = FRONTEND_URL
+
+# Yalies Settings
+
+YALIES_URL = os.getenv('YALIES_URL')
+YALIES_API_KEY = os.getenv('YALIES_API_KEY')
