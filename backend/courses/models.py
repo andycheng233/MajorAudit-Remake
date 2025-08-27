@@ -5,9 +5,9 @@ from authentication.models import CustomUser
 
 
 class Distributionals(models.TextChoices):
-    HU = "HU", "Humanities & Arts"
-    SO = "SO", "Social Sciences"
-    SC = "SC", "Sciences"
+    HU = "Hu", "Humanities & Arts"
+    SO = "So", "Social Sciences"
+    SC = "Sc", "Sciences"
     QR = "QR", "Quantitative Reasoning"
     WR = "WR", "Writing"
     L1 = "L1", "Language Level 1"
@@ -24,6 +24,9 @@ class CourseDistribution(models.Model):
         primary_key=True
     )
 
+    def __str__(self):
+        return self.code
+
 
 class Seasons(models.TextChoices):
     SP = "SP", "Spring"
@@ -32,20 +35,43 @@ class Seasons(models.TextChoices):
 
 
 class Course(models.Model):
+    external_id = models.PositiveIntegerField(unique=True)
     title = models.CharField(max_length=200)
     description = models.TextField()
     credits = models.DecimalField(decimal_places=1, max_digits=2)
     distributionals = models.ManyToManyField(CourseDistribution, blank=True)
 
+    def __str__(self):
+        return self.title
+
+
+class CourseCode(models.Model):
+    department = models.CharField(max_length=10)
+    number = models.CharField(max_length=4)
+
+    def __str__(self):
+        return f"{self.department} {self.number}"
+
+
+class CourseProfessor(models.Model):
+    external_id = models.PositiveIntegerField(unique=True)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
 
 class CourseInstance(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    course_dept = models.CharField(max_length=10)
-    course_num = models.CharField(max_length=4)
-    course_year = models.PositiveIntegerField()
-    course_season = models.CharField(choices=Seasons.choices, max_length=10)
-    professor = models.CharField(max_length=50)
-    section_num = models.PositiveIntegerField()
+    external_id = models.PositiveIntegerField(unique=True)
+    year = models.PositiveIntegerField()
+    season = models.CharField(choices=Seasons.choices, max_length=10)
+    section_num = models.CharField(max_length=10)
+    course_codes = models.ManyToManyField(CourseCode)
+    course_professors = models.ManyToManyField(CourseProfessor)
+
+    def __str__(self):
+        return f"{self.course.title} {self.season} {self.year}"
 
 
 class CustomCourse(models.Model):
@@ -54,8 +80,11 @@ class CustomCourse(models.Model):
     description = models.TextField()
     credits = models.DecimalField(decimal_places=1, max_digits=2)
     distributionals = models.ManyToManyField(CourseDistribution, blank=True)
-    course_dept = models.CharField(max_length=10)
-    course_num = models.CharField(max_length=4)
-    course_year = models.PositiveIntegerField()
-    course_season = models.CharField(choices=Seasons.choices, max_length=10)
+    department = models.CharField(max_length=10)
+    number = models.CharField(max_length=4)
+    year = models.PositiveIntegerField()
+    season = models.CharField(choices=Seasons.choices, max_length=10)
     professor = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"Custom - {self.course.title} {self.department} {self.number} {self.season} {self.year}"

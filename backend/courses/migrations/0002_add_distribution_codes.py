@@ -4,9 +4,9 @@ from django.db import migrations
 
 
 CODES = [
-    ("HU", "Humanities & Arts"),
-    ("SO", "Social Sciences"),
-    ("SC", "Sciences"),
+    ("Hu", "Humanities & Arts"),
+    ("So", "Social Sciences"),
+    ("Sc", "Sciences"),
     ("QR", "Quantitative Reasoning"),
     ("WR", "Writing"),
     ("L1", "Language Level 1"),
