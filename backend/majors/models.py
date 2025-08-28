@@ -33,6 +33,7 @@ class MajorVersionRequirements(models.Model):
         choices=RequirementTypes.choices, max_length=100)
     title = models.CharField(max_length=100)
     description = models.TextField()
+    choose_number = models.PositiveIntegerField()
     credits = models.PositiveIntegerField()
 
 

@@ -18,6 +18,8 @@ class UserWorksheetSemester(models.Model):
 
 
 class UserWorksheetClass(models.Model):
+    worksheet_semester = models.ForeignKey(
+        UserWorksheetSemester, on_delete=models.CASCADE)
     course = models.ForeignKey(
         Course, null=True, blank=True, on_delete=models.CASCADE)
     course_instance = models.ForeignKey(
