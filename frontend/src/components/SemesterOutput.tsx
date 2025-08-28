@@ -15,7 +15,7 @@ import trashcan from "../assets/trashcan.svg";
 import lockAnimation from "../animations/lockAnimation.json";
 
 import { useDrop } from "react-dnd";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useMemo } from "react";
 import clsx from "clsx";
 import Lottie from "lottie-react";
 import type { LottieRefCurrentProps } from "lottie-react";
@@ -37,10 +37,19 @@ function codeToYear(code: number): number {
 function SemesterOutput({ semester }: SemesterOutputProps) {
   const { userData, setUserData } = useUser();
 
+  const activeWorksheetId = userData?.FYP?.activeWorksheetID; // undefined => Main Worksheet (baseline)
+
+  const worksheets = userData?.FYP?.worksheets ?? [];
+
+  const activeSemesters: StudentSemester[] = useMemo(() => {
+    if (!userData) return [];
+    const ws = worksheets.find((w) => w.id === activeWorksheetId);
+    return ws?.studentSemesters ?? [];
+  }, [userData, activeWorksheetId, worksheets]);
+
   // semester doesn't auto update as a prop --> need this to get userData which auto updates
   const updatedSemester =
-    userData?.FYP.studentSemesters.find((s) => s.season === semester.season) ??
-    semester;
+    activeSemesters.find((s) => s.season === semester.season) ?? semester;
 
   const isCompleted = updatedSemester.isCompleted ?? false;
 

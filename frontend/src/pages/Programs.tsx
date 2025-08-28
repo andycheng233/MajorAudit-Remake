@@ -1,8 +1,10 @@
 import bookIcon from "../assets/book.svg";
 import { useApp } from "../contexts/AppContext";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, act } from "react";
 import type { MajorProgress, GroupItemProgress } from "../types/type-program";
 import { formatCourseItemTypes } from "../utils/formatHelpers";
+import { useUser } from "../contexts/UserContext";
+import { addMajor } from "../utils/userDataHelpers";
 
 interface ClassRequirementMapProps {
   reqProgressGroup: GroupItemProgress;
@@ -53,19 +55,64 @@ function ClassRequirementMap({ reqProgressGroup }: ClassRequirementMapProps) {
 }
 
 function Programs() {
+  const { userData, setUserData } = useUser();
   const { appData } = useApp();
   const [selectedProgram, setSelectedProgram] = useState<MajorProgress | null>(
     null
   );
 
+  const worksheets = useMemo(
+    () => userData?.FYP?.worksheets ?? [],
+    [userData?.FYP?.worksheets]
+  );
+
+  const activeWorksheetId = useMemo(
+    () => userData?.FYP?.activeWorksheetID ?? worksheets[0]?.id ?? "baseline",
+    [userData?.FYP?.activeWorksheetID, worksheets]
+  );
+
+  const activeWorksheet = useMemo(() => {
+    const found = worksheets.find((w) => w.id === activeWorksheetId);
+    if (found) return found;
+
+    return {
+      id: "main_ws",
+      name: "Main Worksheet",
+      studentSemesters: [],
+    };
+  }, [worksheets, activeWorksheetId]);
+
+  const setActiveWorksheet = (id: string | null) => {
+    if (!userData) return;
+    setUserData({
+      ...userData,
+      FYP: {
+        ...userData.FYP,
+        activeWorksheetID: id ?? "main_ws",
+      },
+    });
+  };
+
   useEffect(() => {
     if (appData) {
       const defaultProgram = appData.major_processor.processMajorTemplate(
-        appData.major_templates[0]
+        selectedProgram ? selectedProgram : appData.major_templates[0],
+        activeWorksheet
       );
       setSelectedProgram(defaultProgram);
     }
-  }, [appData]);
+  }, [appData, activeWorksheet]);
+
+  const handleMajorAdd = () => {
+    if (userData && selectedProgram) {
+      setUserData(addMajor(userData, selectedProgram));
+    }
+  };
+
+  const majorExists = useMemo(() => {
+    if (!userData || !selectedProgram) return false;
+    return userData.FYP.degreeProgress.some((m) => m.id === selectedProgram.id);
+  }, [userData?.FYP.degreeProgress, selectedProgram?.id]);
 
   if (!appData) return <div>Loading courses and majors...</div>;
   if (!selectedProgram) return <div>Loading program...</div>;
@@ -91,7 +138,8 @@ function Programs() {
                     onClick={() =>
                       setSelectedProgram(
                         appData.major_processor.processMajorTemplate(
-                          major_template
+                          major_template,
+                          activeWorksheet
                         )
                       )
                     }
@@ -125,27 +173,41 @@ function Programs() {
 
           <main className="flex flex-1 flex-row items-stretch gap-6 p-6">
             {/* Left Panel */}
-            <section className="basis-1/2 grow min-w-0 h-full flex flex-col bg-white border-2 border-gray-200 p-6 rounded-xl shadow-md">
-              <div className="flex items-center gap-2">
-                <h1 className="text-3xl font-bold text-gray-800">
+            <section className="relative basis-1/2 grow min-w-0 h-full flex flex-col bg-white border-2 border-gray-200 p-6 rounded-xl shadow-md">
+              {/* Always-on-top-right button */}
+              <button
+                className={`absolute top-6 right-6 rounded-full w-8 h-8 flex items-center justify-center text-center text-xl leading-none z-10 transition duration-300 ease-in-out
+    ${
+      majorExists
+        ? "bg-green-500 text-white"
+        : "bg-blue-500 text-white hover:scale-110"
+    }
+  `}
+                aria-label={majorExists ? "Added" : "Add"}
+                title={majorExists ? "Already in worksheet" : "Add"}
+                onClick={handleMajorAdd}
+                disabled={majorExists} // optional, prevents duplicate adding
+              >
+                {majorExists ? "✓" : "+"}
+              </button>
+
+              {/* Header */}
+              <div className="flex flex-col items-start min-w-0 pr-12">
+                {/* Title */}
+                <h1 className="text-3xl font-bold text-gray-800 break-words">
                   {selectedProgram.name}
                 </h1>
-                <span className="text-sm text-gray-500">
-                  {selectedProgram.info.abbr}
-                </span>
-                <span className="bg-purple-100 text-purple-600 px-2 py-1 rounded text-xs font-medium">
-                  {selectedProgram.info.stats.type}
-                </span>
-              </div>
 
-              {/*<div className="flex items-center gap-3 mt-3">
-                <button className="bg-gray-200 text-sm px-3 py-1 rounded">
-                  B.A.
-                </button>
-                <button className="bg-blue-600 text-white text-sm px-3 py-1 rounded">
-                  B.S.
-                </button>
-              </div>*/}
+                {/* Abbreviation + Type (new line) */}
+                <div className="flex items-center gap-2 mt-2">
+                  <span className="text-gray-500 whitespace-nowrap text-lg">
+                    {selectedProgram.info.abbr}
+                  </span>
+                  <span className="bg-purple-100 text-purple-600 text-sm px-2 py-1 rounded font-medium whitespace-nowrap">
+                    {selectedProgram.info.stats.type}
+                  </span>
+                </div>
+              </div>
 
               {/* Stats */}
               <div className="mt-5">
@@ -217,15 +279,29 @@ function Programs() {
                 </div>
               </div>
             </section>
-            {/* Right Panel */}{" "}
+
+            {/* Right Panel */}
             <section className="basis-1/2 grow min-w-0 h-full flex flex-col bg-white p-6 border-2 border-gray-200 rounded-xl shadow-md">
-              <div className="flex justify-between items-center mb-4">
+              <div className="flex justify-between gap-4 items-center mb-4">
                 <h2 className="text-2xl font-bold text-gray-800">
                   Requirements
                 </h2>
+                <select
+                  className="px-2 py-2  text-center  border border-black rounded-lg"
+                  value={activeWorksheetId}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setActiveWorksheet(val);
+                  }}
+                >
+                  {worksheets.map((w) => (
+                    <option key={w.id} value={w.id}>
+                      {w.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
-              {/* Placeholder for Graph */}
               <div className="rounded text-black overflow-auto">
                 <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {selectedProgram.requirements.map(

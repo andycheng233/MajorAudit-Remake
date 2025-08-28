@@ -68,71 +68,6 @@ const CPSC_4900 =
     season_codes: ["202503"]
 }
 
-/*export const general_requirements_progress: MajorProgress = {
-    name: "General Requirements",
-    totalCourses: 13, 
-    totalRequirementGroups: 6, 
-    //totalCompletedCourses: 5, 
-    totalCompletedRequirementGroups: 0,
-    requirements: [    
-        {
-            type: "category-requirement", 
-            category: "Hu",
-            description: "Humanity", 
-            requiredNum: 2,
-            completedCourses:[studentCourse, null],
-            isFinished: false
-        },  
-
-        {
-           type: "category-requirement", 
-            category: "Sc",
-            description: "Science", 
-            requiredNum: 2,
-            completedCourses:[studentCourse, null],
-            isFinished: false
-
-        },  
-
-        {
-            type: "category-requirement", 
-            category: "So",
-            description: "Social Science", 
-            requiredNum: 2,
-            completedCourses:[studentCourse, null],
-            isFinished: false
-        },  
-
-        {
-            type: "category-requirement", 
-            category: "QR",
-            description: "Quantitative Reasoning", 
-            requiredNum: 2,
-            completedCourses:[studentCourse, null],
-            isFinished: false
-        },  
-
-        {
-           type: "category-requirement", 
-            category: "WR",
-            description: "Writing", 
-            requiredNum: 2,
-            completedCourses:[studentCourse, null],
-            isFinished: false
-        },
-
-        {
-            type: "progression-requirement",
-            description: "Language (L1)", 
-            languageCode: "CHNS",
-            levelDist: ["L1", "L2", "L3"],
-            completedCourses: [studentCourse, null, null], 
-            isFinished: false
-        }
-    ]
-       
-}*/
-
 export const general_requirements_progress: MajorProgress = {
     name: "General Requirements",
     totalCourses: 13,
@@ -158,7 +93,7 @@ export const general_requirements_progress: MajorProgress = {
                 }
             ],
             isCompleted: false,
-            completedNum: 1 // 1 out of 2 course items completed
+            completedNum: 1
         },
         {
             description: "Science",

@@ -155,6 +155,7 @@ export interface GroupItemProgress extends GroupItemTemplate {
 }
 
 export interface MajorTemplate {
+	id: string;
 	name: string;
 	totalCourses: number;
 	totalRequirementGroups: number;

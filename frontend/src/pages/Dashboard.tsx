@@ -1,21 +1,45 @@
 import checkIcon from "../assets/check.svg";
 import { useUser } from "../contexts/UserContext";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 import { calcTotalCredits, calcTotalCourses } from "../utils/userDataHelpers";
 import { formatC_P_UP } from "../utils/formatHelpers";
 import MajorRequirementList from "../components/MajorRequirementList";
 import MajorRequirementGraph from "../components/MajorRequirementGraph";
+import trashcan from "../assets/trashcan.svg";
+
+import { removeMajor } from "../utils/userDataHelpers";
 
 function Dashboard() {
-  const { userData } = useUser();
+  const { userData, setUserData } = useUser();
   const [activeTab, setActiveTab] = useState("degree");
   const [tabIndex, setTabIndex] = useState(0);
   const [selectedMajorIndex, setSelectedMajorIndex] = useState(0);
   const [selectedCertificateIndex, setSelectedCertificateIndex] = useState(0);
 
   const graduationCreditsRequired = 36;
+
+  const worksheets = useMemo(
+    () => userData?.FYP?.worksheets ?? [],
+    [userData?.FYP?.worksheets]
+  );
+
+  const activeWorksheetId = useMemo(
+    () => userData?.FYP?.activeWorksheetID ?? worksheets[0]?.id ?? "baseline",
+    [userData?.FYP?.activeWorksheetID, worksheets]
+  );
+
+  const setActiveWorksheet = (id: string | null) => {
+    if (!userData) return;
+    setUserData({
+      ...userData,
+      FYP: {
+        ...userData.FYP,
+        activeWorksheetID: id ?? "main_ws",
+      },
+    });
+  };
 
   const totalCompletedCredits = useMemo(
     () => (userData ? calcTotalCredits(userData, true) : 0),
@@ -82,6 +106,53 @@ function Dashboard() {
       setSelectedCertificateIndex(newIndex);
       setTabIndex(1 + majorCount + newIndex);
     }
+  };
+
+  const handleRemoveMajor = () => {
+    if (!userData || !userData.FYP.degreeProgress[tabIndex]) return;
+
+    // The program currently shown (major or certificate)
+    const programToRemove = userData.FYP.degreeProgress[tabIndex];
+
+    // Compute the next user snapshot after removal
+    const nextUser = removeMajor(userData, programToRemove);
+
+    // Updated counts after removal
+    const nextMajorCount = nextUser.FYP?.statCount?.majorNum ?? 0;
+    const nextCertCount = nextUser.FYP?.statCount?.certificateNum ?? 0;
+
+    if (activeTab === "major") {
+      if (nextMajorCount === 0) {
+        // No majors left -> go to Degree
+        setActiveTab("degree");
+        setSelectedMajorIndex(0);
+        setTabIndex(0);
+      } else {
+        // Show the previous major (index - 1), clamped
+        const newMajorIdx = Math.max(0, selectedMajorIndex - 1);
+        setSelectedMajorIndex(newMajorIdx);
+        setTabIndex(1 + newMajorIdx);
+      }
+    } else if (activeTab === "certificate") {
+      if (nextCertCount === 0) {
+        // No certificates left -> go to Degree
+        setActiveTab("degree");
+        setSelectedCertificateIndex(0);
+        setTabIndex(0);
+      } else {
+        // Show the previous certificate (index - 1), clamped
+        const newCertIdx = Math.max(0, selectedCertificateIndex - 1);
+        setSelectedCertificateIndex(newCertIdx);
+        // Certificates start after Degree (0) + all majors
+        setTabIndex(1 + nextMajorCount + newCertIdx);
+      }
+    } else {
+      // Safety: on Degree tab, just keep degree selected
+      setTabIndex(0);
+    }
+
+    // Finally commit the user update
+    setUserData(nextUser);
   };
 
   return (
@@ -210,7 +281,7 @@ function Dashboard() {
 
         <section className="bg-white rounded-lg shadow p-4 pb-2 w-full flex flex-col flex-grow mb-2 overflow-hidden">
           <div className="flex flex-row items-center border-b mb-2">
-            <div className="flex gap-4 w-100">
+            <div className="flex gap-4">
               <button
                 className={`py-2 px-4 font-medium ${
                   activeTab === "degree"
@@ -250,6 +321,23 @@ function Dashboard() {
                 {certificateCount > 1 &&
                   `(${selectedCertificateIndex + 1}/${certificateCount})`}
               </button>
+
+              <select
+                className="px-2 py-2 font-medium text-center text-gray-500 hover:text-blue-600"
+                value={activeWorksheetId}
+                onChange={(e) => setActiveWorksheet(e.target.value)}
+                disabled={worksheets.length === 0}
+              >
+                {worksheets.length === 0 ? (
+                  <option value="baseline">No worksheets</option>
+                ) : (
+                  worksheets.map((w) => (
+                    <option key={w.id} value={w.id}>
+                      {w.name}
+                    </option>
+                  ))
+                )}
+              </select>
             </div>
 
             {/* Navigation and Title */}
@@ -303,6 +391,23 @@ function Dashboard() {
                 </button>
               )}
             </div>
+            {/* Trash only for majors/certificates */}
+            {(activeTab === "major" || activeTab === "certificate") &&
+              userData?.FYP?.degreeProgress?.[tabIndex] && (
+                <div className="ml-auto py-2 px-4">
+                  <button
+                    onClick={handleRemoveMajor}
+                    aria-label="Remove program"
+                    title="Remove from worksheet"
+                  >
+                    <img
+                      src={trashcan}
+                      alt="Remove"
+                      className="h-6 w-6 float-right active:scale-125 transition duration-300 ease-in-out"
+                    />
+                  </button>
+                </div>
+              )}
           </div>
 
           <div className="flex flex-row h-full items-center gap-2 min-h-0">

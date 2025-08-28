@@ -98,6 +98,7 @@
         ]
     },
     {
+        "id":"1000",
         "name": "Computer Science B.S.",
         "totalCourses": 12,
         "totalRequirementGroups": 3,
