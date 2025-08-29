@@ -44,12 +44,11 @@ export interface FYP {
   // degreeConfigurations: MajorRequirement[];
 
   degreeProgress: MajorProgress[];
-  degreeProgress2?: [
+  degreeProgress2:
     {
       worksheetID: string;
-      major: MajorProgress[];
-    }
-  ];
+      majors: MajorProgress[];
+    }[];
   statCount: ProgramStats; // how many majors added, how many certificates added
 
 	//degreeConfigurations: DegreeConfiguration[][];

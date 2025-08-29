@@ -13,7 +13,7 @@ export const initialUserData: User = {
     degreeProgress: [general_requirements_progress, /*, cs_requirements_ba_progress*/],
     degreeProgress2: [{
       worksheetID: "ws_main",
-      major: [general_requirements_progress]
+      majors: [general_requirements_progress]
     }],
     statCount:{majorNum: 0, certificateNum: 0},
     worksheets: [

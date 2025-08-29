@@ -11,6 +11,8 @@ import addSemesterIcon from "../assets/addSemester.svg";
 
 import { useApp } from "../contexts/AppContext";
 
+import { general_requirements_progress } from "../data/mock_major_progress";
+
 function CoursePlanning() {
   const { userData, setUserData } = useUser();
   const { appData } = useApp();
@@ -49,6 +51,8 @@ function CoursePlanning() {
     const name = window.prompt("Name your new worksheet:", defaultName);
     if (!name) return;
 
+    const pastDegreeProgress = userData.FYP.degreeProgress2 ?? [];
+
     const newWs = {
       id: `ws_${Date.now()}`,
       name: name.trim(),
@@ -56,12 +60,18 @@ function CoursePlanning() {
       studentSemesters: [],
     };
 
+    console.log(pastDegreeProgress);
+
     setUserData({
       ...userData,
       FYP: {
         ...userData.FYP,
         worksheets: [...worksheets, newWs],
         activeWorksheetID: newWs.id,
+        degreeProgress2: [
+          ...pastDegreeProgress,
+          { worksheetID: newWs.id, majors: [general_requirements_progress] },
+        ],
       },
     });
   };
@@ -94,12 +104,16 @@ function CoursePlanning() {
     if (!ok) return;
 
     const nextList = worksheets.filter((w) => w.id !== activeWorksheetId);
+    const newDegreeProgress = (userData.FYP.degreeProgress2 ?? []).filter(
+      (dp) => dp.worksheetID !== activeWorksheetId
+    );
     setUserData({
       ...userData,
       FYP: {
         ...userData.FYP,
         worksheets: nextList,
-        activeWorksheetID: "main_ws", // fall back to Main Worksheet
+        activeWorksheetID: "main_ws", // fall back to Main Worksheet,
+        degreeProgress2: newDegreeProgress,
       },
     });
   };

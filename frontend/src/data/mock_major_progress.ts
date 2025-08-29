@@ -69,6 +69,7 @@ const CPSC_4900 =
 }
 
 export const general_requirements_progress: MajorProgress = {
+    id: "gen_req_001",
     name: "General Requirements",
     totalCourses: 13,
     totalCompletedCourses: 5,
@@ -82,8 +83,8 @@ export const general_requirements_progress: MajorProgress = {
                 {
                     type: "category-choice",
                     category: ["Hu"],
-                    isCompleted: true,
-                    completedCourses: [studentCourse]
+                    isCompleted: false,
+                    completedCourses: []
                 },
                 {
                     type: "category-choice",
@@ -102,8 +103,8 @@ export const general_requirements_progress: MajorProgress = {
                 {
                     type: "category-choice",
                     category: ["Sc"],
-                    isCompleted: true,
-                    completedCourses: [studentCourse]
+                    isCompleted: false,
+                    completedCourses: []
                 },
                 {
                     type: "category-choice",
@@ -122,8 +123,8 @@ export const general_requirements_progress: MajorProgress = {
                 {
                     type: "category-choice",
                     category: ["So"],
-                    isCompleted: true,
-                    completedCourses: [studentCourse]
+                    isCompleted: false,
+                    completedCourses: []
                 },
                 {
                     type: "category-choice",
@@ -142,8 +143,8 @@ export const general_requirements_progress: MajorProgress = {
                 {
                     type: "category-choice",
                     category: ["QR"],
-                    isCompleted: true,
-                    completedCourses: [studentCourse]
+                    isCompleted: false,
+                    completedCourses: []
                 },
                 {
                     type: "category-choice",
@@ -162,8 +163,8 @@ export const general_requirements_progress: MajorProgress = {
                 {
                     type: "category-choice",
                     category: ["WR"],
-                    isCompleted: true,
-                    completedCourses: [studentCourse]
+                    isCompleted: false,
+                    completedCourses: []
                 },
                 {
                     type: "category-choice",
@@ -180,21 +181,21 @@ export const general_requirements_progress: MajorProgress = {
             requiredNum: 3,
             courseItems: [
                 {
-                    type: "language-choice",
+                    type: "designation-choice",
                     category: ["L1"],
                     subjectCodes: ["CHNS"],
                     isCompleted: false,
                     completedCourses: []
                 },
                 {
-                    type: "language-choice",
+                    type: "designation-choice",
                     category: ["L2"],
                     subjectCodes: ["CHNS"],
                     isCompleted: false,
                     completedCourses: []
                 },
                 {
-                    type: "language-choice",
+                    type: "designation-choice",
                     category: ["L3"],
                     subjectCodes: ["CHNS"],
                     isCompleted: false,
@@ -204,7 +205,27 @@ export const general_requirements_progress: MajorProgress = {
             isCompleted: false,
             completedNum: 0
         }
-    ]
+    ],
+    info: {
+        name: "",
+	    abbr: "",
+	    degreeType: "",
+	    stats: {
+            courses: -1,
+	rating: -1,
+	workload: -1,
+    	type: "",
+        },
+	    students: -1,
+	    about: "",
+	    dus: {
+            name: [""],
+	email: [""],
+        },
+	    catalogLink: "",
+	    websiteLink: "",
+	    majorEmail: ""
+    }
 };
 
 

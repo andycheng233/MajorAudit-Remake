@@ -63,9 +63,6 @@ export class MajorProcessor {
     this.course_database = course_database;
   }
 
-  /** ------------------------------
-   * Helpers (parsing & utilities)
-   * ------------------------------ */
   private getPrimaryCode(course: StudentCourse): string {
     // Assumes codes like "CPSC 323"
     return course.course.codes[0];
