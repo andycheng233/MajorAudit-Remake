@@ -8,9 +8,21 @@ export const initialUserData: User = {
   onboard: true,
   FYP: {
     languageRequirement: "L1",
-    studentSemesters: mockSemesters,
+    //studentSemesters: mockSemesters,
     // degreeConfigurations: [general_requirements],
-    degreeProgress: [general_requirements_progress, cs_requirements_bs_progress/*, cs_requirements_ba_progress*/],
-    statCount:{majorNum: 1, certificateNum: 0}
+    degreeProgress: [general_requirements_progress, /*, cs_requirements_ba_progress*/],
+    degreeProgress2: [{
+      worksheetID: "ws_main",
+      majors: [general_requirements_progress]
+    }],
+    statCount:{majorNum: 0, certificateNum: 0},
+    worksheets: [
+      {
+        id: "ws_main",
+        name: "Main Worksheet",
+        studentSemesters: mockSemesters,
+      },
+    ],
+  activeWorksheetID: "ws_main"
   }
 };

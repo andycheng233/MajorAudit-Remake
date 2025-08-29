@@ -24,6 +24,12 @@ export interface StudentSemester {
     isCompleted: boolean; // completed (true) vs planned (false)
 }
 
+export interface Worksheet {
+  id: string;
+  name: string;
+  studentSemesters: StudentSemester[];
+}
+
 interface ProgramStats 
 {
   majorNum: number;
@@ -32,16 +38,23 @@ interface ProgramStats
 
 export interface FYP {
 	languageRequirement: string;
-	studentSemesters: StudentSemester[];
+	//studentSemesters: StudentSemester[];
 
   // shows degree, major, certificate requirements
   // degreeConfigurations: MajorRequirement[];
 
   degreeProgress: MajorProgress[];
+  degreeProgress2:
+    {
+      worksheetID: string;
+      majors: MajorProgress[];
+    }[];
   statCount: ProgramStats; // how many majors added, how many certificates added
 
 	//degreeConfigurations: DegreeConfiguration[][];
 	//degreeDeclarations: StudentDegree[];
+  worksheets: Worksheet[]; 
+  activeWorksheetID: string;
 }
 
 export interface User {

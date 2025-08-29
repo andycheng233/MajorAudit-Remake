@@ -4,60 +4,143 @@ import { addSemester } from "../utils/userDataHelpers";
 import CourseOutput from "../components/CourseOutput";
 import SemesterOutput from "../components/SemesterOutput";
 import { useUser } from "../contexts/UserContext";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 
 import pencilIcon from "../assets/pencil.svg";
 import addSemesterIcon from "../assets/addSemester.svg";
 
 import { useApp } from "../contexts/AppContext";
 
+import { general_requirements_progress } from "../data/mock_major_progress";
+
 function CoursePlanning() {
   const { userData, setUserData } = useUser();
   const { appData } = useApp();
-  const [formData, setFormData] = useState({
-    term: -1,
-    year: -1,
-    title: "",
-  });
 
+  const [formData, setFormData] = useState({ term: -1, year: -1, title: "" });
   const [searchTerm, setSearchTerm] = useState("");
 
-  //show first 500 courses --> we gonna assume they are not looking through courses but searching to add in general
+  const worksheets = userData?.FYP?.worksheets ?? [];
 
-  if (!appData) {
-    return <div>Loading courses and majors...</div>;
-  }
+  const activeWorksheetId = userData?.FYP?.activeWorksheetID;
 
+  const activeSemesters: StudentSemester[] = useMemo(() => {
+    if (!userData) return [];
+    const ws = worksheets.find((w) => w.id === activeWorksheetId);
+    return ws?.studentSemesters ?? [];
+  }, [userData, activeWorksheetId, worksheets]);
+
+  if (!appData) return <div>Loading courses and majors...</div>;
+
+  // ---------- Worksheet helpers ----------
+
+  const setActiveWorksheet = (id: string | null) => {
+    if (!userData) return;
+    setUserData({
+      ...userData,
+      FYP: {
+        ...userData.FYP,
+        activeWorksheetID: id ?? "main_ws",
+      },
+    });
+  };
+
+  const createWorksheet = () => {
+    if (!userData) return;
+    const defaultName = `Worksheet ${worksheets.length}`;
+    const name = window.prompt("Name your new worksheet:", defaultName);
+    if (!name) return;
+
+    const pastDegreeProgress = userData.FYP.degreeProgress2 ?? [];
+
+    const newWs = {
+      id: `ws_${Date.now()}`,
+      name: name.trim(),
+      // clone semesters from the current active view
+      studentSemesters: [],
+    };
+
+    console.log(pastDegreeProgress);
+
+    setUserData({
+      ...userData,
+      FYP: {
+        ...userData.FYP,
+        worksheets: [...worksheets, newWs],
+        activeWorksheetID: newWs.id,
+        degreeProgress2: [
+          ...pastDegreeProgress,
+          { worksheetID: newWs.id, majors: [general_requirements_progress] },
+        ],
+      },
+    });
+  };
+
+  const renameWorksheet = () => {
+    if (!userData || !activeWorksheetId) return; // can't rename Main Worksheet
+    const current = worksheets.find((w) => w.id === activeWorksheetId);
+    if (!current) return;
+    const name = window.prompt("Rename worksheet:", current.name);
+    if (!name || !name.trim()) return;
+
+    setUserData({
+      ...userData,
+      FYP: {
+        ...userData.FYP,
+        worksheets: worksheets.map((w) =>
+          w.id === activeWorksheetId ? { ...w, name: name.trim() } : w
+        ),
+      },
+    });
+  };
+
+  const deleteWorksheet = () => {
+    if (!userData || !activeWorksheetId) return; // can't delete Main Worksheet
+    const current = worksheets.find((w) => w.id === activeWorksheetId);
+    if (!current) return;
+    const ok = window.confirm(
+      `Delete worksheet "${current.name}"? This cannot be undone.`
+    );
+    if (!ok) return;
+
+    const nextList = worksheets.filter((w) => w.id !== activeWorksheetId);
+    const newDegreeProgress = (userData.FYP.degreeProgress2 ?? []).filter(
+      (dp) => dp.worksheetID !== activeWorksheetId
+    );
+    setUserData({
+      ...userData,
+      FYP: {
+        ...userData.FYP,
+        worksheets: nextList,
+        activeWorksheetID: "main_ws", // fall back to Main Worksheet,
+        degreeProgress2: newDegreeProgress,
+      },
+    });
+  };
+
+  // ---------- Search ----------
   const searchNormalized = searchTerm.toLowerCase().replace(/\s+/g, "");
-
   const filteredCourses = appData.courses.filter(
     (course) =>
       course.title
         .toLowerCase()
         .replace(/\s+/g, "")
         .includes(searchNormalized) ||
-      /*course.codes.some((code) =>
-        code.toLowerCase().replace(/\s+/g, "").includes(searchNormalized)
-      )*/
       course.codes[0]
         .toLowerCase()
         .replace(/\s+/g, "")
         .includes(searchNormalized)
   );
-
   const slicedCourses = filteredCourses.slice(0, 250);
 
+  // ---------- Form handling ----------
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  //
   const handleInputSubmit = () => {
     if (
       !(
@@ -74,8 +157,6 @@ function CoursePlanning() {
     let year = Number(formData.year);
     if (Number(formData.term) == 2 || Number(formData.term) == 1) year += 1;
 
-    let test = Number(`${year}${formData.term}`);
-
     const newSemester: StudentSemester = {
       title: formData.title,
       season: Number(`${year}${formData.term}`),
@@ -83,14 +164,14 @@ function CoursePlanning() {
       isCompleted: false,
     };
 
-    console.log("added %d\n", test);
-
+    // Main Worksheet (baseline)
     setUserData(addSemester(userData, newSemester));
   };
 
   return (
     <>
       <div className="flex h-full">
+        {/* Left: course search */}
         <div
           className="fixed w-72 flex flex-col bg-white border-gray-200 border-r-4 z-10"
           style={{ height: "calc(100vh - var(--navbar-height, 64px))" }}
@@ -98,8 +179,7 @@ function CoursePlanning() {
           <input
             type="text"
             placeholder="Search by course code, title, prof..."
-            className="px-4 py-2 border-b-4 border-gray-200 bg-blue-100 placeholder-shown:bg-white w-full focus:outline-none focus:bg-gray-100
-             transition-colors duration-200 ease-in-out border-t-2"
+            className="px-4 py-2 border-b-4 border-gray-200 bg-blue-100 placeholder-shown:bg-white w-full focus:outline-none focus:bg-gray-100 transition-colors duration-200 ease-in-out border-t-2"
             onChange={(search) => setSearchTerm(search.target.value)}
           />
           <div className="overflow-y-auto flex-1 pb-2">
@@ -113,6 +193,7 @@ function CoursePlanning() {
           </div>
         </div>
 
+        {/* Right: planner */}
         <div className="ml-72 flex-1 overflow-y-auto">
           <header className="m-6 mt-4 flex flex-col">
             <div className="flex flex-row gap-2 items-center">
@@ -127,13 +208,15 @@ function CoursePlanning() {
               clicking on the +!
             </p>
           </header>
+
           <hr className="border-gray-200 border-t-3" />
+
+          {/* Toolbar: Add Semester + Worksheet controls */}
           <div className="flex flex-row p-4 pl-6 gap-4 items-center bg-gray-100">
+            {/* Add semester */}
             <button
               onClick={handleInputSubmit}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleInputSubmit();
-              }}
+              onKeyDown={(e) => e.key === "Enter" && handleInputSubmit()}
             >
               <img
                 src={addSemesterIcon}
@@ -142,26 +225,25 @@ function CoursePlanning() {
               />
             </button>
             <h2 className="text-xl font-medium">Add Semester </h2>
+
+            {/* Term / Year / Title inputs */}
             <select
-              className="px-4 py-2 border rounded-md text-center"
+              className="px-4 py-2 border rounded-md text-center bg-white h-10"
               name="term"
               onChange={handleInputChange}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleInputSubmit();
-              }}
+              onKeyDown={(e) => e.key === "Enter" && handleInputSubmit()}
             >
               <option value="">Select a term</option>
               <option value="03">Fall</option>
               <option value="01">Spring</option>
               <option value="02">Summer</option>
             </select>
+
             <select
-              className="px-4 py-2 border rounded-md text-center"
+              className="px-4 py-2 border rounded-md text-center bg-white h-10"
               name="year"
               onChange={handleInputChange}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleInputSubmit();
-              }}
+              onKeyDown={(e) => e.key === "Enter" && handleInputSubmit()}
             >
               <option value="">Select a year</option>
               <option value="2020">2020-2021</option>
@@ -175,19 +257,74 @@ function CoursePlanning() {
               <option value="2028">2028-2029</option>
               <option value="2029">2029-2030</option>
             </select>
+
             <input
               type="text"
               placeholder="Enter a label (e.g. Junior Spring)"
-              className="border p-2 rounded w-64 h-10"
+              className="border p-2 rounded w-64 h-10 bg-white"
               name="title"
               onChange={handleInputChange}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleInputSubmit();
-              }}
+              onKeyDown={(e) => e.key === "Enter" && handleInputSubmit()}
             />
+
+            {/* Worksheets selector + actions */}
+            <div className="ml-auto flex items-center gap-2">
+              <label className="p-4 text-xl font-medium">
+                Manage Worksheets
+              </label>
+              <select
+                className="px-2 py-2 border rounded-md text-center bg-white"
+                value={activeWorksheetId}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setActiveWorksheet(val);
+                }}
+              >
+                {worksheets.map((w) => (
+                  <option key={w.id} value={w.id}>
+                    {w.name}
+                  </option>
+                ))}
+              </select>
+
+              <button
+                className="px-4 py-2 border rounded-md text-center bg-white h-10 hover:bg-gray-100"
+                onClick={createWorksheet}
+                title="Create worksheet from current view"
+              >
+                New
+              </button>
+              <button
+                className="px-4 py-2 border rounded-md text-center bg-white h-10 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={renameWorksheet}
+                disabled={!activeWorksheetId}
+                title={
+                  !activeWorksheetId
+                    ? "Cannot rename Main Worksheet"
+                    : "Rename this worksheet"
+                }
+              >
+                Rename
+              </button>
+              <button
+                className="px-4 py-2 border rounded-md text-center bg-white hover:bg-red-50 text-red-600 border-red-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={deleteWorksheet}
+                disabled={!activeWorksheetId}
+                title={
+                  !activeWorksheetId
+                    ? "Cannot delete Main Worksheet"
+                    : "Delete this worksheet"
+                }
+              >
+                Delete
+              </button>
+            </div>
           </div>
+
           <hr className="border-gray-200 border-t-3" />
-          {userData?.FYP.studentSemesters.map((semester, index) => (
+
+          {/* Semesters: render from the active worksheet (or baseline) */}
+          {activeSemesters.map((semester, index) => (
             <SemesterOutput key={index} semester={semester} />
           ))}
         </div>
