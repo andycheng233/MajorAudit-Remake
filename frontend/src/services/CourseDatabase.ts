@@ -26,27 +26,42 @@ export async function loadCourses(json_file : string)
 }
 
 export class CourseDatabase {
-    private courses = new Map<string, Course>();
+    private courses = new Map<number, Course>();
+
+    normalizeCodes(rawCodes: { department: string; number: string }[]): string[] {
+        if(rawCodes.length === 0) return [""];
+        
+        return rawCodes.map(c => `${c.department} ${c.number}`);
+    }
 
     // maybe change to make same codes --> same courses
-    constructor(coursesArray: Course[])
+    constructor(coursesArray: any[])
     {
-        /*coursesArray.forEach(course => {
-            course.codes.forEach(code => {
-                this.courses.set(code, course);
-            })
-        })*/
-
         coursesArray.forEach(course => {
-            this.courses.set(course.codes[0], course);
+            const newCourse: Course = {
+                id: course.external_id,
+                codes: this.normalizeCodes(course.course_codes),
+                title: course.title,
+                credit: course.credits,
+                dist: course.distributionals || [],
+                //seasons: course.seasons || [],
+                //season_codes: course.season_codes || []
+            };
+
+            this.courses.set(course.external_id, newCourse);
         })
     }
 
-    getCourse(code : string): Course | undefined {
+    getCourse(code : number): Course | undefined {
         return this.courses.get(code);
     }
 
-    getCourses(codes : string[]): Course[] {
+    getAllCourses(): Course[]
+    {
+        return this.courses.size === 0 ? [] : Array.from(this.courses.values());
+    }
+
+    getCourses(codes : number[]): Course[] {
         return codes.map(code => this.getCourse(code)).filter(Boolean) as Course[];
     }
 

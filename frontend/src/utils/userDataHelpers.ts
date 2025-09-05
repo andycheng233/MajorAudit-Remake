@@ -151,7 +151,7 @@ export function calcTotalSemesterCredits(user: User, season: number): number {
     {
         const semester = ws.studentSemesters.find(s => s.season === season);
         if(semester)
-            semester.studentCourses.map(course => totalCredits += course.course.credit);
+            semester.studentCourses.map(course => totalCredits += Number(course.course.credit));
     }
 
     return totalCredits;
@@ -219,11 +219,17 @@ export function updateIsCompleted(user: User, isCompleted: boolean, season: numb
 }
 
 export function addMajor(user: User, major: MajorProgress): User {
-  const exists = user.FYP.degreeProgress.some(m => m.id === major.id);
+  const dp2 = user.FYP.degreeProgress2 ?? [];
 
-  if (exists) {
-    return user;
-  }
+  const newDegreeProgress2 = dp2.map(entry => {
+    // Prevent duplicate in each worksheet
+    const exists = entry.majors.some(m => m.id === major.id);
+    return exists
+      ? entry
+      : { ...entry, majors: [...entry.majors, major] };
+  });
+
+  console.log(newDegreeProgress2)
 
   return {
     ...user,
@@ -232,25 +238,28 @@ export function addMajor(user: User, major: MajorProgress): User {
       statCount: {
         ...user.FYP.statCount,
         majorNum:
-          major.info.stats.type === "major"
+          major.info.degreeType === "major" || major.info.degreeType=== "Major"
             ? user.FYP.statCount.majorNum + 1
             : user.FYP.statCount.majorNum,
         certificateNum:
-          major.info.stats.type === "certificate"
+          major.info.degreeType === "certificate" || major.info.degreeType === "Certificate"
             ? user.FYP.statCount.certificateNum + 1
             : user.FYP.statCount.certificateNum,
       },
-      degreeProgress: [...user.FYP.degreeProgress, major],
+      degreeProgress2: newDegreeProgress2,
     },
   };
 }
 
 export function removeMajor(user: User, major: MajorProgress): User {
-  const exists = user.FYP.degreeProgress.some(m => m.id === major.id);
+  const dp2 = user.FYP.degreeProgress2 ?? [];
 
-  if (!exists) {
-    return user;
-  }
+  const newDegreeProgress2 = dp2.map(entry => ({
+    ...entry,
+    majors: entry.majors.filter(m => m.id !== major.id),
+  }));
+
+  console.log(newDegreeProgress2);
 
   return {
     ...user,
@@ -259,16 +268,15 @@ export function removeMajor(user: User, major: MajorProgress): User {
       statCount: {
         ...user.FYP.statCount,
         majorNum:
-          major.info.stats.type === "major"
+          major.info.degreeType === "major" || major.info.degreeType === "Major"
             ? Math.max(0, user.FYP.statCount.majorNum - 1)
             : user.FYP.statCount.majorNum,
         certificateNum:
-          major.info.stats.type === "certificate"
+          major.info.degreeType === "certificate" || major.info.degreeType === "Certificate"
             ? Math.max(0, user.FYP.statCount.certificateNum - 1)
             : user.FYP.statCount.certificateNum,
       },
-      degreeProgress: user.FYP.degreeProgress.filter(m => m.id !== major.id),
+      degreeProgress2: newDegreeProgress2,
     },
   };
 }
-

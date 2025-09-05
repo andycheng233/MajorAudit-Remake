@@ -6,7 +6,7 @@ export const mockCourses: Course[] = [
     codes: ["CPSC 201"],
     title: "Introduction to Computer Science",
     credit: 1,
-    dist: ["QR", "Sc"],
+    dist: ["QR"],
     seasons: ["Fall", "Spring"],
     season_codes: []
   },

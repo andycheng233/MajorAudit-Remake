@@ -67,7 +67,16 @@ export function formatCourseItemTypes(group: GroupItemProgress) {
 
       case "combo-choice":
         // Show as "MATH 1100 + MATH 1110 (counts as 1)"
-        return `${item.courseCodes.join(" + ")} (counts as ${item.countAs})`;
+        const codes2 = item.courseCodes;
+        if (codes2.length === 2) {
+          return `${codes2[0]} and ${codes2[1]}`;
+        } else if (codes2.length > 2) {
+          const allButLast = codes2.slice(0, -1).join(", ");
+          const last = codes2[codes2.length - 1];
+          return `${allButLast}, and ${last}`;
+        } else {
+          return `${codes2[0]}` || "";
+        }
 
       case "range-choice":
         // Show as "2 courses from ECON 4400-4491"

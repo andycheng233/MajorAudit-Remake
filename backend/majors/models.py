@@ -12,6 +12,9 @@ class Major(models.Model):
     catalog_link = models.CharField(max_length=100)
     website_link = models.CharField(max_length=100)
 
+    def __str__(self):
+        return f'{self.name} ({self.abbreviation})'
+
 
 class MajorVersion(models.Model):
     major = models.ForeignKey(Major, on_delete=models.CASCADE)

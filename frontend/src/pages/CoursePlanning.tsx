@@ -53,6 +53,11 @@ function CoursePlanning() {
 
     const pastDegreeProgress = userData.FYP.degreeProgress2 ?? [];
 
+    // Find the majors from the "main_ws" worksheet
+    const mainWsMajors =
+      pastDegreeProgress.find((dp) => dp.worksheetID === "ws_main")?.majors ??
+      [];
+
     const newWs = {
       id: `ws_${Date.now()}`,
       name: name.trim(),
@@ -61,6 +66,7 @@ function CoursePlanning() {
     };
 
     console.log(pastDegreeProgress);
+    console.log(mainWsMajors);
 
     setUserData({
       ...userData,
@@ -70,7 +76,7 @@ function CoursePlanning() {
         activeWorksheetID: newWs.id,
         degreeProgress2: [
           ...pastDegreeProgress,
-          { worksheetID: newWs.id, majors: [general_requirements_progress] },
+          { worksheetID: newWs.id, majors: [...mainWsMajors] },
         ],
       },
     });
@@ -112,7 +118,7 @@ function CoursePlanning() {
       FYP: {
         ...userData.FYP,
         worksheets: nextList,
-        activeWorksheetID: "main_ws", // fall back to Main Worksheet,
+        activeWorksheetID: "ws_main", // fall back to Main Worksheet,
         degreeProgress2: newDegreeProgress,
       },
     });
@@ -131,6 +137,7 @@ function CoursePlanning() {
         .replace(/\s+/g, "")
         .includes(searchNormalized)
   );
+
   const slicedCourses = filteredCourses.slice(0, 250);
 
   // ---------- Form handling ----------

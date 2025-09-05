@@ -17,9 +17,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   // init user data or retrieve from localStorage
   useEffect(() => {
     const stored = localStorage.getItem("mockUserData");
+    console.log(stored);
     //if (stored) setUserData(JSON.parse(stored));
     //else setUserData(initialUserData);
-    if (stored) setUserData(initialUserData); //to reset mock user data
+    //if (stored) {
+    setUserData(initialUserData); //to reset mock user data
+    //}
+    //console.log(`[UserData] Using ${initialUserData}`);
   }, []);
 
   // save data to local storage on change

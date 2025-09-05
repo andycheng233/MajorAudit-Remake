@@ -1,5 +1,6 @@
 import checkIcon from "../assets/check.svg";
 import { useUser } from "../contexts/UserContext";
+import { useApp } from "../contexts/AppContext";
 
 import { useMemo, useState, useEffect } from "react";
 
@@ -10,9 +11,11 @@ import MajorRequirementGraph from "../components/MajorRequirementGraph";
 import trashcan from "../assets/trashcan.svg";
 
 import { removeMajor } from "../utils/userDataHelpers";
+import type { MajorProgress } from "../types/type-program";
 
 function Dashboard() {
   const { userData, setUserData } = useUser();
+  const { appData } = useApp();
   const [activeTab, setActiveTab] = useState("degree");
   const [tabIndex, setTabIndex] = useState(0);
   const [selectedMajorIndex, setSelectedMajorIndex] = useState(0);
@@ -40,6 +43,14 @@ function Dashboard() {
       },
     });
   };
+
+  const activeMajorProgress: MajorProgress[] = useMemo(() => {
+    if (!userData) return [];
+    const dP = userData.FYP.degreeProgress2.find(
+      (w) => w.worksheetID === activeWorksheetId
+    );
+    return dP?.majors ?? [];
+  }, [activeWorksheetId]);
 
   const totalCompletedCredits = useMemo(
     () => (userData ? calcTotalCredits(userData, true) : 0),
@@ -109,10 +120,12 @@ function Dashboard() {
   };
 
   const handleRemoveMajor = () => {
-    if (!userData || !userData.FYP.degreeProgress[tabIndex]) return;
+    console.log("Removing major/certificate...");
+    if (!userData || !activeMajorProgress[tabIndex]) return;
 
     // The program currently shown (major or certificate)
-    const programToRemove = userData.FYP.degreeProgress[tabIndex];
+    const programToRemove = activeMajorProgress[tabIndex];
+    console.log("To remove:", programToRemove);
 
     // Compute the next user snapshot after removal
     const nextUser = removeMajor(userData, programToRemove);
@@ -155,13 +168,48 @@ function Dashboard() {
     setUserData(nextUser);
   };
 
+  useEffect(() => {
+    if (
+      userData?.FYP?.degreeProgress2 &&
+      userData?.FYP?.worksheets &&
+      appData?.major_processor
+    ) {
+      const updatedDegreeProgress2 = userData.FYP.degreeProgress2.map(
+        (entry) => {
+          const worksheet = userData.FYP.worksheets.find(
+            (ws) => ws.id === entry.worksheetID
+          );
+          if (!worksheet) return entry;
+          const updatedMajors = entry.majors
+            .map((major) =>
+              appData.major_processor.updateMajorProgress(major, worksheet)
+            )
+            .filter((m): m is MajorProgress => m !== undefined);
+
+          return {
+            ...entry,
+            majors: updatedMajors,
+          };
+        }
+      );
+
+      setUserData({
+        ...userData,
+        FYP: {
+          ...userData.FYP,
+          degreeProgress2: updatedDegreeProgress2,
+        },
+      });
+    }
+  }, [userData?.FYP?.worksheets, appData?.major_processor, activeWorksheetId]);
+
   return (
     <>
       <div className=" h-full flex flex-col bg-gray-50 p-6 min-w-screen">
         {/* Header */}
         <header className="mb-8 flex gap-3 items-center">
           <h1 className="text-3xl font-bold text-gray-800">
-            {userData?.name.split(" ")[0]}'s Dashboard {/* get first name*/}
+            {userData?.first_name}'s Dashboard {/* get first name*/}
           </h1>
           <img src={checkIcon} alt="check icon" className="w-9 h-9"></img>
         </header>
@@ -365,8 +413,7 @@ function Dashboard() {
               {/* Program name */}
               <div>
                 <span className="font-bold text-2xl">
-                  {userData?.FYP?.degreeProgress?.[tabIndex]?.name ||
-                    "Loading..."}
+                  {activeMajorProgress[tabIndex]?.name || "Loading..."}
                 </span>
               </div>
 
@@ -393,7 +440,7 @@ function Dashboard() {
             </div>
             {/* Trash only for majors/certificates */}
             {(activeTab === "major" || activeTab === "certificate") &&
-              userData?.FYP?.degreeProgress?.[tabIndex] && (
+              activeMajorProgress[tabIndex] && (
                 <div className="ml-auto py-2 px-4">
                   <button
                     onClick={handleRemoveMajor}
@@ -412,18 +459,18 @@ function Dashboard() {
 
           <div className="flex flex-row h-full items-center gap-2 min-h-0">
             <div className="flex-shrink-0">
-              {userData?.FYP?.degreeProgress?.[tabIndex] ? (
+              {activeMajorProgress[tabIndex] ? (
                 <MajorRequirementList
-                  major_progress={userData.FYP.degreeProgress[tabIndex]}
+                  major_progress={activeMajorProgress[tabIndex]}
                 />
               ) : (
                 <div>Loading degree requirements...</div>
               )}{" "}
             </div>
             <div className="flex-1 h-96 bg-white border-gray-200 border-2 m-2 p-2 shadow overflow-hidden min-w-0">
-              {userData?.FYP?.degreeProgress?.[tabIndex] ? (
+              {activeMajorProgress[tabIndex] ? (
                 <MajorRequirementGraph
-                  major_progress={userData.FYP.degreeProgress[tabIndex]}
+                  major_progress={activeMajorProgress[tabIndex]}
                 />
               ) : (
                 <div>Loading degree requirements...</div>

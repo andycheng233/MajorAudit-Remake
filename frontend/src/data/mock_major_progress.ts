@@ -10,7 +10,8 @@ const studentCourse = {
 
 const CPSC_2010 = 
 {
-    codes: ["CPSC 2010"],
+    id: 1,
+    codes: ["CPSC 2020"],
     title: "Introduction to Computer Science",
     credit: 1,
     dist: ["QR"],
@@ -84,7 +85,9 @@ export const general_requirements_progress: MajorProgress = {
                     type: "category-choice",
                     category: ["Hu"],
                     isCompleted: false,
-                    completedCourses: []
+                    completedCourses: [
+                        {course: CPSC_2010, term: 202401, status: "DA_COMPLETE", manualFulfillInfo: {manualFulfill: true, groupIdx: 1, itemIdx: 1}},
+                    ]
                 },
                 {
                     type: "category-choice",

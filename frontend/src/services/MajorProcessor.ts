@@ -21,6 +21,7 @@ export async function loadMajorTemplates(json_file : string)
        }));
 
         console.log(`Succesfully loaded ${major_templates.length} major templates`)
+        console.log(major_templates_normalized);
         return major_templates_normalized;
 
     } catch (error) {
@@ -107,8 +108,8 @@ export class MajorProcessor {
     // Usually means: "pick ONE from this set" unless req.count specified
     const set = new Set(req.courseCodes);
     return available
-      .map((c, i) => ({ i, ok: set.has(c.course.codes[0]) || c.course.codes.some(code => set.has(code)) }))
-      .filter(x => x.ok)
+      .map((c, i) => ({ i, matchCode: set.has(c.course.codes[0]) || c.course.codes.some(code => set.has(code)) }))
+      .filter(x => x.matchCode)
       .map(x => x.i);
   }
 
@@ -120,8 +121,8 @@ export class MajorProcessor {
     // We'll return candidates that are in the set; the caller will take as many as needed.
     const set = new Set(req.courseCodes);
     return available
-      .map((c, i) => ({ i, ok: set.has(c.course.codes[0]) || c.course.codes.some(code => set.has(code)) }))
-      .filter(x => x.ok)
+      .map((c, i) => ({ i, matchCode: set.has(c.course.codes[0]) || c.course.codes.some(code => set.has(code)) }))
+      .filter(x => x.matchCode)
       .map(x => x.i);
   }
 
@@ -274,12 +275,29 @@ export class MajorProcessor {
     const available = allCourses.slice();
     const consumed = new Set<string>();
 
+    // mark down the courses that were manually added by the user in a list
+    const manuallyAddedCourses = allCourses.filter(c => c.manualFulfillInfo?.manualFulfill);
+    manuallyAddedCourses.forEach(c => {
+      consumed.add(this.getCourseKey(c));
+    });
+
     // Build a heap of every course item, prioritized by type
     const heap = new Heap<Node>((a: Node, b: Node) => a.weight - b.weight);
     template.requirements.forEach((group, gi) => {
       group.courseItems.forEach((item, ii) => {
         const weight = MajorProcessor.TYPE_ORDER[item.type as RequirementType] ?? 10;
-        heap.push({ weight, groupIdx: gi, itemIdx: ii, req: item });
+        // if this item was manually fulfilled (based on groupIdx and itemIdx) --> don't add to heap
+        const wasManuallyFulfilled = manuallyAddedCourses.some(c => 
+          c.manualFulfillInfo?.groupIdx === gi && 
+          c.manualFulfillInfo?.itemIdx === ii
+        );
+
+        if(!wasManuallyFulfilled) {
+          heap.push({ weight, groupIdx: gi, itemIdx: ii, req: item });
+        }
+        else {
+          heap.push({ weight: 100, groupIdx: gi, itemIdx: ii, req: item }); // manually fulfilled items get lowest priority
+        }
       });
     });
 
@@ -305,6 +323,18 @@ export class MajorProcessor {
     // Greedy assignment loop
     while (!heap.empty()) {
       const { groupIdx, itemIdx, req } = heap.pop()!;
+
+      const manual = manuallyAddedCourses.find(c => 
+        c.manualFulfillInfo?.groupIdx === groupIdx && 
+        c.manualFulfillInfo?.itemIdx === itemIdx
+      );
+      
+      if(manual) {
+        itemsProgress[groupIdx][itemIdx].isCompleted = true;
+        itemsProgress[groupIdx][itemIdx].completedCourses.push(manual);
+        continue;
+      }
+
       const need = this.requestedCount(req);
 
       // Filter available courses to those not yet consumed
@@ -348,5 +378,32 @@ export class MajorProcessor {
     };
 
     return majorProgress;
+  }
+
+  updateMajorProgress(majorProgress: MajorProgress, ws: Worksheet): MajorProgress
+  {
+    console.log("RUNNING UPDATE MAJOR PROGRESS");
+    // Turn majorProgress into a MajorTemplate and re-process
+    const template: MajorTemplate = {
+      id: majorProgress.id,
+      name: majorProgress.name,
+      totalCourses: majorProgress.totalCourses,
+      totalRequirementGroups: majorProgress.totalRequirementGroups,
+      requirements: majorProgress.requirements.map(r => ({
+        description: r.description,
+        requiredNum: r.requiredNum,
+        courseItems: r.courseItems.map(ci => {
+          // Strip progress fields to get template
+          const { isCompleted, completedCourses, ...rest } = ci;
+          return rest as CourseItemTemplateType;
+        }),
+      })),
+      info: majorProgress.info,
+    };
+
+    console.log("Major Progress: ", majorProgress);
+    console.log("Major Template: ", template);
+
+    return this.processMajorTemplate(template, ws);
   }
 }

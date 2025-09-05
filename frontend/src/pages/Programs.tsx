@@ -5,6 +5,7 @@ import type { MajorProgress, GroupItemProgress } from "../types/type-program";
 import { formatCourseItemTypes } from "../utils/formatHelpers";
 import { useUser } from "../contexts/UserContext";
 import { addMajor } from "../utils/userDataHelpers";
+import type { MajorTemplate } from "../types/type-program";
 
 interface ClassRequirementMapProps {
   reqProgressGroup: GroupItemProgress;
@@ -93,15 +94,25 @@ function Programs() {
     });
   };
 
+  const majorTemplatesSorted = useMemo<MajorTemplate[]>(() => {
+    if (!appData?.major_templates) return [];
+    // If you intentionally skip a placeholder template, replace with .filter(...)
+    return [...appData.major_templates.slice(1)].sort((a, b) =>
+      (a.name ?? a.name).localeCompare(b.name ?? b.name, "en", {
+        sensitivity: "base",
+      })
+    );
+  }, [appData?.major_templates]);
+
   useEffect(() => {
     if (appData) {
       const defaultProgram = appData.major_processor.processMajorTemplate(
-        selectedProgram ? selectedProgram : appData.major_templates[0],
+        selectedProgram ? selectedProgram : majorTemplatesSorted[0],
         activeWorksheet
       );
       setSelectedProgram(defaultProgram);
     }
-  }, [appData, activeWorksheet]);
+  }, [appData, activeWorksheet, majorTemplatesSorted]);
 
   const handleMajorAdd = () => {
     if (userData && selectedProgram) {
@@ -109,10 +120,14 @@ function Programs() {
     }
   };
 
+  // changed this from degreeProgress to degreeProgress2
   const majorExists = useMemo(() => {
     if (!userData || !selectedProgram) return false;
-    return userData.FYP.degreeProgress.some((m) => m.id === selectedProgram.id);
-  }, [userData?.FYP.degreeProgress, selectedProgram?.id]);
+    const entry = userData.FYP.degreeProgress2.find(
+      (d) => d.worksheetID === activeWorksheetId
+    );
+    return entry?.majors.some((m) => m.id === selectedProgram.id) ?? false;
+  }, [userData?.FYP.degreeProgress2, selectedProgram?.id, activeWorksheetId]);
 
   if (!appData) return <div>Loading courses and majors...</div>;
   if (!selectedProgram) return <div>Loading program...</div>;
@@ -132,7 +147,7 @@ function Programs() {
           />
           <div className="overflow-y-auto flex-1 pb-2">
             <ul className="flex flex-col w-full">
-              {appData.major_templates.map((major_template, index) => (
+              {majorTemplatesSorted.map((major_template, index) => (
                 <li key={index}>
                   <div
                     onClick={() =>

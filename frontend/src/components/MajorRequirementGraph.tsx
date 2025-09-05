@@ -21,6 +21,7 @@ function ClassRequirementMap({ reqProgressGroup }: ClassRequirementMapProps) {
     pairs.push({
       requirement: requirements[i] || null,
       fulfillment: reqProgressGroup.courseItems[i]?.completedCourses[0] || null,
+      remaining: reqProgressGroup.requiredNum - reqProgressGroup.completedNum,
     });
   }
 
@@ -67,7 +68,17 @@ function MajorRequirementGraph({ major_progress }: MajorRequirementGraphProps) {
           className="bg-gray-100 border-gray-200 border-2 m-1.5 p-1.5 flex-1 min-w-48 min-h-72 flex flex-col"
         >
           <span className="font-medium mb-1 mt-1 text-center flex-shrink-0">
-            {reqProgressGroup.description}
+            {reqProgressGroup.description} -{" "}
+            <span
+              className={
+                reqProgressGroup.requiredNum - reqProgressGroup.completedNum ==
+                0
+                  ? "text-green-700"
+                  : "text-red-600"
+              }
+            >
+              {reqProgressGroup.requiredNum - reqProgressGroup.completedNum}
+            </span>
           </span>
           <div className="flex-1 min-h-0">
             <ClassRequirementMap reqProgressGroup={reqProgressGroup} />

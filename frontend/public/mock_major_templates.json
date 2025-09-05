@@ -1,5 +1,6 @@
 [
     {
+        "id": "gen_req",
         "name": "General Requirements",
         "totalCourses": 13,
         "totalRequirementGroups": 6,
@@ -79,26 +80,48 @@
                 "requiredNum": 3,
                 "courseItems": [
                     {
-                        "type": "language-choice",
+                        "type": "designation-choice",
                         "category": ["L1"],
                         "subjectCodes": ["CHNS"]
                     },
                     {
-                        "type": "language-choice",
+                        "type": "designation-choice",
                         "category": ["L2"],
                         "subjectCodes": ["CHNS"]
                     },
                     {
-                        "type": "language-choice",
+                        "type": "designation-choice",
                         "category": ["L3"],
                         "subjectCodes": ["CHNS"]
                     }
                 ]
             }
-        ]
-    },
-    {
-        "id":"1000",
+        ],
+
+    "info": {
+      "name": "General Requirements",
+      "abbr": "",
+      "degreeType": "",
+      "stats": {
+        "courses": 13,
+        "rating": 0,
+        "workload": 0,
+        "type": ""
+      },
+      "students": 0,
+      "about": "",
+      "dus": {
+        "name": [""],
+        "email": [""]
+      },
+      "catalogLink": "",
+      "websiteLink": "",
+      "majorEmail": ""
+    }
+
+        },
+        {
+        "id":"cs_bs",
         "name": "Computer Science B.S.",
         "totalCourses": 12,
         "totalRequirementGroups": 3,
@@ -112,8 +135,8 @@
                         "courseCode": "CPSC 2010"
                     },
                     {
-                        "type": "single-choice",
-                        "courseCode": "CPSC 2020"
+                        "type": "multi-choice",
+                        "courseCodes": ["CPSC 2020", "CPSC 2440"]
                     },
                     {
                         "type": "single-choice",
@@ -124,8 +147,8 @@
                         "courseCode": "CPSC 3230"
                     },
                     {
-                        "type": "single-choice",
-                        "courseCode": "CPSC 3650"
+                        "type": "multi-choice",
+                        "courseCodes": ["CPSC 3650", "CPSC 3660"]
                     }
                 ]
             },
@@ -175,111 +198,42 @@
                     }
                 ]
             }
-        ]
-    },
+        ], 
+         "info": {
+      "name": "Computer Science B.S.",
+      "abbr": "CPSC",
+      "degreeType": "Major",
+      "stats": {
+        "courses": 12,
+        "rating": 0,
+        "workload": 0,
+        "type": "B.S."
+      },
+      "students": -1,
+      "about": "The Department of Computer Science offers both B.S. and B.A. degree programs and four combined major programs in cooperation with other departments: Electrical Engineering and Computer Science, Computer Science and Economics, Computer Science and Mathematics, and Computer Science and Psychology. Each program not only provides a solid technical education in the core of computer science but also allows students to take a broad range of courses in other disciplines that are an essential part of a liberal arts education.\n\nSpecifically, the Computer Science and combined major programs share a common core of five computer science courses. The first is CPSC 2010, a survey that demonstrates the breadth and depth of the field to students who have taken the equivalent of an introductory programming course. The remaining core courses cover discrete mathematics (CPSC 2020 or MATH 2440), data structures (CPSC 2230), systems programming and computer architecture (CPSC 3230), and algorithm analysis and design (CPSC 3650 or 3660). Only one of CPSC 3650 or 3660 may be taken for major credit. Together these courses include the material that every major should know.\n\nThe core courses are supplemented by electives (and, for a combined major, core courses in the other discipline) that offer great flexibility in tailoring a program to each student's interests. The capstone is the senior project (CPSC 4900), through which students experience the challenges and rewards of original research under the guidance of a faculty adviser.\n\nProspective majors are encouraged to discuss their programs with the director of undergraduate studies (DUS) as early as possible.",
+      "dus": {
+        "name": ["Theodore Kim"],
+        "email": ["theodore.kim@yale.edu"]
+      },
+      "catalogLink": "https://catalog.yale.edu/ycps/subjects-of-instruction/computer-science/",
+      "websiteLink": "https://engineering.yale.edu/academic-study/departments/computer-science",
+      "majorEmail": "theodore.kim@yale.edu"
+    }
+    }, 
     {
-        "name": "Computer Science B.A.",
-        "totalCourses": 10,
+        "id":"econ_ba",
+        "name": "Economics B.A.",
+        "totalCourses": 12,
         "totalRequirementGroups": 3,
         "requirements": [
             {
-                "description": "Core Requirements",
-                "requiredNum": 5,
-                "courseItems": [
-                    {
-                        "type": "single-choice",
-                        "courseCode": "CPSC 2010"
-                    },
-                    {
-                        "type": "single-choice",
-                        "courseCode": "CPSC 2020"
-                    },
-                    {
-                        "type": "single-choice",
-                        "courseCode": "CPSC 2230"
-                    },
-                    {
-                        "type": "single-choice",
-                        "courseCode": "CPSC 3230"
-                    },
-                    {
-                        "type": "single-choice",
-                        "courseCode": "CPSC 3650"
-                    }
-                ]
-            },
-            {
-                "description": "Electives",
-                "requiredNum": 4,
-                "courseItems": [
-                    {
-                        "type": "level-choice",
-                        "subjectCode": ["CPSC"],
-                        "level": 3000
-                    },
-                    {
-                        "type": "level-choice",
-                        "subjectCode": ["CPSC"],
-                        "level": 3000
-                    },
-                    {
-                        "type": "level-choice",
-                        "subjectCode": ["CPSC"],
-                        "level": 3000
-                    },
-                    {
-                        "type": "level-choice",
-                        "subjectCode": ["CPSC"],
-                        "level": 3000
-                    }
-                ]
-            },
-            {
-                "description": "Senior Project",
-                "requiredNum": 1,
-                "courseItems": [
-                    {
-                        "type": "single-choice",
-                        "courseCode": "CPSC 4900"
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "name": "Economics B.A.",
-        "totalCourses": 12,
-        "totalRequirementGroups": 8,
-        "requirements": [
-            {
-                "description": "Math Requirement",
-                "requiredNum": 1,
-                "courseItems": [
-                    {
-                        "type": "multi-choice",
-                        "courseCodes": ["MATH 1120", "MATH 1150", "MATH 1160", "MATH 1180", "MATH 1200", "ENAS 1510"]
-                    },
-                    {
-                        "type": "combo-choice",
-                        "courseCodes": ["MATH 1100", "MATH 1110"],
-                        "countAs": 1
-                    }
-                ]
-            },
-            {
-                "description": "Introductory Microeconomics",
-                "requiredNum": 1,
+                "description": "Introductory Micro + Macro",
+                "requiredNum": 2,
                 "courseItems": [
                     {
                         "type": "multi-choice",
                         "courseCodes": ["ECON 1108", "ECON 1110", "ECON 1115"]
-                    }
-                ]
-            },
-            {
-                "description": "Introductory Macroeconomics",
-                "requiredNum": 1,
-                "courseItems": [
+                    },
                     {
                         "type": "multi-choice",
                         "courseCodes": ["ECON 1111", "ECON 1116"]
@@ -287,19 +241,13 @@
                 ]
             },
             {
-                "description": "Intermediate Microeconomics",
-                "requiredNum": 1,
+                "description": "Intermediate Micro + Macro",
+                "requiredNum": 2,
                 "courseItems": [
-                    {
+                  {
                         "type": "multi-choice",
                         "courseCodes": ["ECON 2121", "ECON 2125"]
-                    }
-                ]
-            },
-            {
-                "description": "Intermediate Macroeconomics",
-                "requiredNum": 1,
-                "courseItems": [
+                    },
                     {
                         "type": "multi-choice",
                         "courseCodes": ["ECON 2122", "ECON 2126"]
@@ -310,54 +258,117 @@
                 "description": "Econometrics",
                 "requiredNum": 1,
                 "courseItems": [
-                    {
+                  {
                         "type": "multi-choice",
                         "courseCodes": ["ECON 1117", "ECON 2123", "ECON 2136"]
                     }
                 ]
             },
             {
-                "description": "Electives",
+               "description": "Mathematics #1",
+                "requiredNum": 1,
+                "courseItems": [
+                  {
+                        "type": "multi-choice",
+                        "courseCodes": ["MATH 1180", "MATH 1299"]
+                    },
+                {
+                    "type": "combo-choice",
+                    "courseCodes": ["MATH 1100", "MATH 1110"], 
+                    "countAs": 1
+                }
+            ]
+            }, 
+            {
+               "description": "Mathematics #2",
+                "requiredNum": 1,
+                "courseItems": [
+                  {
+                        "type": "multi-choice",
+                        "courseCodes": ["MATH 1120", "MATH 1150", "MATH 1160"]
+                    },
+                    
+                {
+                    "type": "level-choice",
+                    "subjectCode": ["MATH"],
+                    "level": 1161
+                },
+                {
+                    "type": "single-choice",
+                    "courseCode": "ENAS 1510"
+                }
+            ]
+            }, 
+            {
+               "description": "Electives",
                 "requiredNum": 4,
                 "courseItems": [
-                    {
-                        "type": "level-choice",
+                  {
+                         "type": "level-choice",
                         "subjectCode": ["ECON"],
                         "level": 1159
                     },
-                    {
-                        "type": "level-choice",
+                    
+               {
+                         "type": "level-choice",
                         "subjectCode": ["ECON"],
                         "level": 1159
                     },
-                    {
-                        "type": "level-choice",
+            {
+                         "type": "level-choice",
                         "subjectCode": ["ECON"],
                         "level": 1159
                     },
-                    {
-                        "type": "level-choice",
+            {
+                         "type": "level-choice",
                         "subjectCode": ["ECON"],
                         "level": 1159
                     }
-                ]
-            },
+                    
+                    
+            ]
+            }, 
             {
-                "description": "Senior Requirement",
+               "description": "Senior Requirement",
                 "requiredNum": 2,
                 "courseItems": [
-                    {
-                        "type": "level-choice",
+                  {
+                        "type": "range-choice",
                         "subjectCode": ["ECON"],
-                        "level": 4400
+                        "minLevel": 4400,
+                        "maxLevel": 4491
                     },
-                    {
-                        "type": "level-choice",
+                    
+                 {
+                        "type": "range-choice",
                         "subjectCode": ["ECON"],
-                        "level": 4400
+                        "minLevel": 4400,
+                        "maxLevel": 4491
                     }
-                ]
-            }
-        ]
-    }
+            ]
+            } 
+
+
+        ], 
+         "info": {
+      "name": "Economics B.A.",
+      "abbr": "ECON",
+      "degreeType": "Major",
+      "stats": {
+        "courses": 12,
+        "rating": 0,
+        "workload": 0,
+        "type": "B.A."
+      },
+      "students": -1,
+      "about": "Economics is much broader than the study of recessions and inflation or stocks and bonds. Economists study decision making and incentives, such as how taxes create incentives for labor market and savings behavior. Many current public policy debates concern questions of economics, including causes and consequences of inequality and gender and racial wage gaps; how to address poverty; the impact of immigration and trade on the well-being of a country’s citizens; the cause of the Great Recession; and how to predict future downturns. \n\nAt Yale, economics is regarded and taught as part of a liberal arts education, not as a preparation for any particular vocation. It can, however, provide a good background for several professions. The economics major strengthens critical reasoning skills and gives students experience analyzing data, skills that will serve students well on the job market both inside and outside academia. Recent majors have pursued careers in business, government, and nonprofits. Others have entered law, medical, or business school, or have gone on to graduate work in economics, often after working in related fields for two or three years. ",
+      "dus": {
+        "name": ["Giovanni Maggi"],
+        "email": ["giovanni.maggi@yale.edu"]
+    },
+    "catalogLink": "https://catalog.yale.edu/ycps/subjects-of-instruction/economics/",
+      "websiteLink": "https://economics.yale.edu/",
+      "majorEmail": "economics@yale.edu"
+}
+}
 ]

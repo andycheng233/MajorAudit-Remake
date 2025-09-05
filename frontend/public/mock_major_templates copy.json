@@ -1,0 +1,367 @@
+[
+    {
+        "name": "General Requirements",
+        "totalCourses": 13,
+        "totalRequirementGroups": 6,
+        "requirements": [
+            {
+                "description": "Humanity",
+                "requiredNum": 2,
+                "courseItems": [
+                    {
+                        "type": "category-choice",
+                        "category": ["Hu"],
+                        "isCompleted": true,
+                        "completedCourses" : [
+                            
+                        ]
+                    },
+                    {
+                        "type": "category-choice",
+                        "category": ["Hu"]
+                    }
+                ]
+            },
+            {
+                "description": "Science",
+                "requiredNum": 2,
+                "courseItems": [
+                    {
+                        "type": "category-choice",
+                        "category": ["Sc"]
+                    },
+                    {
+                        "type": "category-choice",
+                        "category": ["Sc"]
+                    }
+                ]
+            },
+            {
+                "description": "Social Science",
+                "requiredNum": 2,
+                "courseItems": [
+                    {
+                        "type": "category-choice",
+                        "category": ["So"]
+                    },
+                    {
+                        "type": "category-choice",
+                        "category": ["So"]
+                    }
+                ]
+            },
+            {
+                "description": "Quantitative Reasoning",
+                "requiredNum": 2,
+                "courseItems": [
+                    {
+                        "type": "category-choice",
+                        "category": ["QR"]
+                    },
+                    {
+                        "type": "category-choice",
+                        "category": ["QR"]
+                    }
+                ]
+            },
+            {
+                "description": "Writing",
+                "requiredNum": 2,
+                "courseItems": [
+                    {
+                        "type": "category-choice",
+                        "category": ["WR"]
+                    },
+                    {
+                        "type": "category-choice",
+                        "category": ["WR"]
+                    }
+                ]
+            },
+            {
+                "description": "Language (L1)",
+                "requiredNum": 3,
+                "courseItems": [
+                    {
+                        "type": "designation-choice",
+                        "category": ["L1"],
+                        "subjectCodes": ["CHNS"]
+                    },
+                    {
+                        "type": "designation-choice",
+                        "category": ["L2"],
+                        "subjectCodes": ["CHNS"]
+                    },
+                    {
+                        "type": "designation-choice",
+                        "category": ["L3"],
+                        "subjectCodes": ["CHNS"]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id":"1000",
+        "name": "Computer Science B.S.",
+        "totalCourses": 12,
+        "totalRequirementGroups": 3,
+        "requirements": [
+            {
+                "description": "Core Requirements",
+                "requiredNum": 5,
+                "courseItems": [
+                    {
+                        "type": "single-choice",
+                        "courseCode": "CPSC 2010"
+                    },
+                    {
+                        "type": "single-choice",
+                        "courseCode": "CPSC 2020"
+                    },
+                    {
+                        "type": "single-choice",
+                        "courseCode": "CPSC 2230"
+                    },
+                    {
+                        "type": "single-choice",
+                        "courseCode": "CPSC 3230"
+                    },
+                    {
+                        "type": "single-choice",
+                        "courseCode": "CPSC 3650"
+                    }
+                ]
+            },
+            {
+                "description": "Electives",
+                "requiredNum": 6,
+                "courseItems": [
+                    {
+                        "type": "level-choice",
+                        "subjectCode": ["CPSC"],
+                        "level": 3000
+                    },
+                    {
+                        "type": "level-choice",
+                        "subjectCode": ["CPSC"],
+                        "level": 3000
+                    },
+                    {
+                        "type": "level-choice",
+                        "subjectCode": ["CPSC"],
+                        "level": 3000
+                    },
+                    {
+                        "type": "level-choice",
+                        "subjectCode": ["CPSC"],
+                        "level": 3000
+                    },
+                    {
+                        "type": "level-choice",
+                        "subjectCode": ["CPSC"],
+                        "level": 3000
+                    },
+                    {
+                        "type": "level-choice",
+                        "subjectCode": ["CPSC"],
+                        "level": 3000
+                    }
+                ]
+            },
+            {
+                "description": "Senior Project",
+                "requiredNum": 1,
+                "courseItems": [
+                    {
+                        "type": "single-choice",
+                        "courseCode": "CPSC 4900"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Computer Science B.A.",
+        "totalCourses": 10,
+        "totalRequirementGroups": 3,
+        "requirements": [
+            {
+                "description": "Core Requirements",
+                "requiredNum": 5,
+                "courseItems": [
+                    {
+                        "type": "single-choice",
+                        "courseCode": "CPSC 2010"
+                    },
+                    {
+                        "type": "single-choice",
+                        "courseCode": "CPSC 2020"
+                    },
+                    {
+                        "type": "single-choice",
+                        "courseCode": "CPSC 2230"
+                    },
+                    {
+                        "type": "single-choice",
+                        "courseCode": "CPSC 3230"
+                    },
+                    {
+                        "type": "single-choice",
+                        "courseCode": "CPSC 3650"
+                    }
+                ]
+            },
+            {
+                "description": "Electives",
+                "requiredNum": 4,
+                "courseItems": [
+                    {
+                        "type": "level-choice",
+                        "subjectCode": ["CPSC"],
+                        "level": 3000
+                    },
+                    {
+                        "type": "level-choice",
+                        "subjectCode": ["CPSC"],
+                        "level": 3000
+                    },
+                    {
+                        "type": "level-choice",
+                        "subjectCode": ["CPSC"],
+                        "level": 3000
+                    },
+                    {
+                        "type": "level-choice",
+                        "subjectCode": ["CPSC"],
+                        "level": 3000
+                    }
+                ]
+            },
+            {
+                "description": "Senior Project",
+                "requiredNum": 1,
+                "courseItems": [
+                    {
+                        "type": "single-choice",
+                        "courseCode": "CPSC 4900"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Economics B.A.",
+        "totalCourses": 12,
+        "totalRequirementGroups": 8,
+        "requirements": [
+            {
+                "description": "Math Requirement",
+                "requiredNum": 1,
+                "courseItems": [
+                    {
+                        "type": "multi-choice",
+                        "courseCodes": ["MATH 1120", "MATH 1150", "MATH 1160", "MATH 1180", "MATH 1200", "ENAS 1510"]
+                    },
+                    {
+                        "type": "combo-choice",
+                        "courseCodes": ["MATH 1100", "MATH 1110"],
+                        "countAs": 1
+                    }
+                ]
+            },
+            {
+                "description": "Introductory Microeconomics",
+                "requiredNum": 1,
+                "courseItems": [
+                    {
+                        "type": "multi-choice",
+                        "courseCodes": ["ECON 1108", "ECON 1110", "ECON 1115"]
+                    }
+                ]
+            },
+            {
+                "description": "Introductory Macroeconomics",
+                "requiredNum": 1,
+                "courseItems": [
+                    {
+                        "type": "multi-choice",
+                        "courseCodes": ["ECON 1111", "ECON 1116"]
+                    }
+                ]
+            },
+            {
+                "description": "Intermediate Microeconomics",
+                "requiredNum": 1,
+                "courseItems": [
+                    {
+                        "type": "multi-choice",
+                        "courseCodes": ["ECON 2121", "ECON 2125"]
+                    }
+                ]
+            },
+            {
+                "description": "Intermediate Macroeconomics",
+                "requiredNum": 1,
+                "courseItems": [
+                    {
+                        "type": "multi-choice",
+                        "courseCodes": ["ECON 2122", "ECON 2126"]
+                    }
+                ]
+            },
+            {
+                "description": "Econometrics",
+                "requiredNum": 1,
+                "courseItems": [
+                    {
+                        "type": "multi-choice",
+                        "courseCodes": ["ECON 1117", "ECON 2123", "ECON 2136"]
+                    }
+                ]
+            },
+            {
+                "description": "Electives",
+                "requiredNum": 4,
+                "courseItems": [
+                    {
+                        "type": "level-choice",
+                        "subjectCode": ["ECON"],
+                        "level": 1159
+                    },
+                    {
+                        "type": "level-choice",
+                        "subjectCode": ["ECON"],
+                        "level": 1159
+                    },
+                    {
+                        "type": "level-choice",
+                        "subjectCode": ["ECON"],
+                        "level": 1159
+                    },
+                    {
+                        "type": "level-choice",
+                        "subjectCode": ["ECON"],
+                        "level": 1159
+                    }
+                ]
+            },
+            {
+                "description": "Senior Requirement",
+                "requiredNum": 2,
+                "courseItems": [
+                    {
+                        "type": "level-choice",
+                        "subjectCode": ["ECON"],
+                        "level": 4400
+                    },
+                    {
+                        "type": "level-choice",
+                        "subjectCode": ["ECON"],
+                        "level": 4400
+                    }
+                ]
+            }
+        ]
+    }
+]

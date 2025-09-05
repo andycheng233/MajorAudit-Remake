@@ -75,10 +75,10 @@ function CourseOutput({
         )}
         <p className="font-bold truncate overflow-hidden whitespace-nowrap">
           {course.codes[0]}
-          <span className="text-gray-500 text-sm font-medium">
+          {/*<span className="text-gray-500 text-sm font-medium">
             {" "}
             ({formatSeason(course.seasons)})
-          </span>
+          </span>*/}
         </p>
         <p className="truncate overflow-hidden whitespace-nowrap">
           {course.title}
